@@ -4,7 +4,10 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 
-const siteUrl = (process.env.SITE_URL ?? '').replace(/\/$/, '');
+const siteUrl = (
+  process.env.SITE_URL ??
+  'https://netzwerke-q2-lernstrecke.phinau.chatgpt.site'
+).replace(/\/$/, '');
 
 export default defineConfig({
   base: './',
