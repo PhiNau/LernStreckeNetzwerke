@@ -55,15 +55,15 @@ import {
 } from '@/components/ui/progress';
 
 const stations = [
-  ['Startsignal', 'FILIUS kennt ihr schon', '10 Min.'],
-  ['Adresse & Transport', 'IP, Port und TCP', '15 Min.'],
-  ['Gemeinsame Sprache', 'Was ist ein Protokoll?', '15 Min.'],
-  ['Web-Kommunikation', 'HTTP verstehen', '15 Min.'],
-  ['Dialog mit Regeln', 'POP3 analysieren', '20 Min.'],
-  ['Java-Verbindung', 'Die Klasse Connection', '20 Min.'],
-  ['Nachrichten empfangen', 'Connection oder Client?', '15 Min.'],
-  ['Ereignisse behandeln', 'Was macht der Server?', '10 Min.'],
-  ['Transfer', 'Dein eigenes Protokoll', '15 Min.'],
+  ['Startsignal', 'FILIUS kennt ihr schon'],
+  ['Adresse & Transport', 'IP, Port und TCP'],
+  ['Gemeinsame Sprache', 'Was ist ein Protokoll?'],
+  ['Web-Kommunikation', 'HTTP verstehen'],
+  ['Dialog mit Regeln', 'POP3 analysieren'],
+  ['Java-Verbindung', 'Die Klasse Connection'],
+  ['Nachrichten empfangen', 'Connection oder Client?'],
+  ['Ereignisse behandeln', 'Was macht der Server?'],
+  ['Transfer', 'Dein eigenes Protokoll'],
 ] as const;
 
 type QuizQuestion = {
@@ -234,14 +234,14 @@ function StationFrame({
 }) {
   return (
     <>
-      <div className="mb-7">
+      <div className="mb-11">
         <p className="mb-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-teal-700">
           {kicker}
         </p>
-        <h1 className="max-w-3xl text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
+        <h1 className="max-w-4xl text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
           {title}
         </h1>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">
+        <p className="mt-5 max-w-4xl text-base leading-8 text-slate-600 sm:text-lg">
           {lead}
         </p>
       </div>
@@ -263,7 +263,7 @@ function TaskCard({
 }) {
   return (
     <Card className="border-0 bg-white shadow-[0_24px_70px_rgba(15,23,42,.10)] ring-slate-200">
-      <CardHeader className="border-b border-slate-100 sm:px-7 sm:py-6">
+      <CardHeader className="border-b border-slate-100 p-6 sm:px-8 sm:py-7 lg:px-10">
         <div className="flex items-start gap-3">
           <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-amber-100 text-amber-800">
             <Icon className="size-5" aria-hidden="true" />
@@ -278,14 +278,14 @@ function TaskCard({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-5 sm:p-7">{children}</CardContent>
+      <CardContent className="p-6 sm:p-8 lg:p-10">{children}</CardContent>
     </Card>
   );
 }
 
 function CompletedBanner({ onNext, text }: { onNext: () => void; text: string }) {
   return (
-    <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:flex sm:items-center sm:justify-between">
+    <div className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:flex sm:items-center sm:justify-between sm:p-8">
       <div>
         <p className="font-bold text-emerald-950">Station geschafft.</p>
         <p className="mt-1 max-w-2xl text-sm leading-6 text-emerald-800">{text}</p>
@@ -303,28 +303,23 @@ function CompletedBanner({ onNext, text }: { onNext: () => void; text: string })
 function PhaseHeading({
   step,
   title,
-  minutes,
   icon: Icon,
 }: {
   step: 1 | 2 | 3;
   title: string;
-  minutes: number;
   icon: LucideIcon;
 }) {
   return (
-    <div className="mb-3 mt-8 flex flex-wrap items-center gap-3 first:mt-0">
-      <span className="grid size-9 place-items-center rounded-xl bg-slate-950 font-mono text-xs font-black text-cyan-300">
+    <div className={`mb-6 flex flex-wrap items-center gap-4 ${step === 1 ? 'mt-0' : 'mt-16'}`}>
+      <span className="grid size-11 place-items-center rounded-xl bg-slate-950 font-mono text-sm font-black text-cyan-300">
         {step}
       </span>
       <div>
         <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-teal-700">
           <Icon className="size-4" aria-hidden="true" /> Schritt {step} von 3
         </p>
-        <h2 className="mt-0.5 text-xl font-black text-slate-950">{title}</h2>
+        <h2 className="mt-1 text-2xl font-black text-slate-950">{title}</h2>
       </div>
-      <Badge variant="outline" className="ml-auto h-7 gap-1.5 bg-white px-3 text-slate-600">
-        <Clock3 className="size-3" /> ca. {minutes} Min.
-      </Badge>
     </div>
   );
 }
@@ -334,30 +329,28 @@ function IntroBlock({
   paragraphs,
   facts,
   note,
-  minutes,
   children,
 }: {
   title: string;
   paragraphs: string[];
   facts: string[];
   note: string;
-  minutes: number;
   children?: React.ReactNode;
 }) {
   return (
     <section aria-label="Einführung">
-      <PhaseHeading step={1} title="Verstehen" minutes={minutes} icon={BookOpen} />
+      <PhaseHeading step={1} title="Verstehen" icon={BookOpen} />
       <Card className="overflow-hidden border-0 bg-white shadow-[0_18px_55px_rgba(15,23,42,.08)] ring-slate-200">
-        <CardContent className="p-5 sm:p-7">
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+        <CardContent className="p-6 sm:p-8 lg:p-10">
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:gap-10">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Kurz erklärt</p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-slate-950">{title}</h3>
-              <div className="mt-4 space-y-3 text-sm leading-6 text-slate-650 sm:text-base">
+              <div className="mt-5 space-y-4 text-sm leading-7 text-slate-650 sm:text-base">
                 {paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               </div>
             </div>
-            <div className="rounded-2xl bg-slate-950 p-4 text-slate-100 sm:p-5">
+            <div className="rounded-2xl bg-slate-950 p-5 text-slate-100 sm:p-6">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-cyan-300">Darauf kommt es an</p>
               <ul className="mt-4 space-y-3">
                 {facts.map((fact) => (
@@ -370,7 +363,7 @@ function IntroBlock({
             </div>
           </div>
           {children}
-          <div className="mt-6 flex gap-3 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950">
+          <div className="mt-8 flex gap-3 rounded-xl border border-cyan-200 bg-cyan-50 p-5 text-sm leading-7 text-cyan-950">
             <Lightbulb className="mt-0.5 size-5 shrink-0 text-cyan-700" aria-hidden="true" />
             <p><strong>Merksatz:</strong> {note}</p>
           </div>
@@ -397,7 +390,6 @@ function SequenceDiagramTask({
   correctOrder,
   onComplete,
   completed,
-  minutes,
   start,
   end,
   success,
@@ -409,7 +401,6 @@ function SequenceDiagramTask({
   correctOrder: string[];
   onComplete: () => void;
   completed: boolean;
-  minutes: number;
   start?: { label: string; icon: LucideIcon };
   end?: { label: string; icon: LucideIcon };
   success: string;
@@ -444,11 +435,11 @@ function SequenceDiagramTask({
 
   return (
     <section aria-label="Interaktives Schaubild">
-      <PhaseHeading step={2} title="Schaubild zusammensetzen" minutes={minutes} icon={Workflow} />
+      <PhaseHeading step={2} title="Schaubild zusammensetzen" icon={Workflow} />
       <TaskCard title={title} description={description} icon={MousePointerClick}>
         {support}
-        <div className="mt-5 overflow-x-auto rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-3 sm:p-4">
-          <div className="flex min-h-28 flex-col items-stretch justify-center gap-2 xl:w-max xl:min-w-full xl:flex-row xl:items-center">
+        <div className="mt-8 overflow-x-auto rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-4 sm:p-6">
+          <div className="flex min-h-32 flex-col items-stretch justify-center gap-3 xl:w-max xl:min-w-full xl:flex-row xl:items-center">
             {start && <DiagramEndpoint endpoint={start} />}
             {start && <ArrowRight className="mx-auto size-5 shrink-0 rotate-90 text-slate-300 xl:rotate-0" aria-hidden="true" />}
             {ordered.length === 0 && (
@@ -480,7 +471,7 @@ function SequenceDiagramTask({
             {end && <DiagramEndpoint endpoint={end} />}
           </div>
         </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {available.map((item) => {
             const Icon = item.icon;
             return (
@@ -496,7 +487,7 @@ function SequenceDiagramTask({
             );
           })}
         </div>
-        <div className="mt-5 flex flex-wrap justify-between gap-3">
+        <div className="mt-8 flex flex-wrap justify-between gap-4">
           <Button variant="outline" size="lg" onClick={reset} disabled={correct} className="min-h-12 rounded-xl">
             <RotateCcw className="size-4" /> Neu aufbauen
           </Button>
@@ -521,7 +512,6 @@ function MatchDiagramTask({
   items,
   onComplete,
   completed,
-  minutes,
   success,
   support,
 }: {
@@ -531,7 +521,6 @@ function MatchDiagramTask({
   items: MatchItem[];
   onComplete: () => void;
   completed: boolean;
-  minutes: number;
   success: string;
   support?: React.ReactNode;
 }) {
@@ -572,11 +561,11 @@ function MatchDiagramTask({
 
   return (
     <section aria-label="Interaktives Zuordnungsschaubild">
-      <PhaseHeading step={2} title="Schaubild zusammensetzen" minutes={minutes} icon={Workflow} />
+      <PhaseHeading step={2} title="Schaubild zusammensetzen" icon={Workflow} />
       <TaskCard title={title} description={description} icon={MousePointerClick}>
         {support}
-        <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">1. Karte wählen</p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <p className="mt-7 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">1. Karte wählen</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {available.map((item) => {
             const Icon = item.icon;
             return (
@@ -588,13 +577,13 @@ function MatchDiagramTask({
           })}
           {available.length === 0 && <p className="col-span-full rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Alle Karten sind eingesetzt. Prüfe jetzt das Schaubild.</p>}
         </div>
-        <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">2. Zielbereich wählen</p>
-        <div className={`mt-3 grid gap-3 ${categories.length === 3 ? 'lg:grid-cols-3' : 'sm:grid-cols-2'}`}>
+        <p className="mt-8 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">2. Zielbereich wählen</p>
+        <div className={`mt-4 grid gap-4 ${categories.length === 3 ? 'lg:grid-cols-3' : 'sm:grid-cols-2'}`}>
           {categories.map((category) => {
             const Icon = category.icon;
             const placed = items.filter((item) => placements[item.id] === category.id);
             return (
-              <div key={category.id} className="min-h-40 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-3">
+              <div key={category.id} className="min-h-44 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4">
                 <button type="button" onClick={() => place(category.id)} disabled={!active || correct} className="flex min-h-14 w-full items-center gap-3 rounded-xl p-1 text-left transition enabled:hover:bg-cyan-100 disabled:cursor-default">
                   <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-slate-950 text-cyan-300"><Icon className="size-5" aria-hidden="true" /></span>
                   <span><span className="block font-black text-slate-950">{category.label}</span><span className="block text-xs leading-4 text-slate-500">{category.caption}</span></span>
@@ -609,7 +598,7 @@ function MatchDiagramTask({
             );
           })}
         </div>
-        <div className="mt-5 flex flex-wrap justify-between gap-3">
+        <div className="mt-8 flex flex-wrap justify-between gap-4">
           <Button variant="outline" size="lg" onClick={reset} disabled={correct} className="min-h-12 rounded-xl"><RotateCcw className="size-4" /> Neu zuordnen</Button>
           <Button size="lg" onClick={check} disabled={Object.keys(placements).length !== items.length || correct} className="min-h-12 rounded-xl bg-slate-950 px-5 text-white">Schaubild prüfen <Check className="size-4" /></Button>
         </div>
@@ -623,7 +612,6 @@ function FinalQuiz({
   unlocked,
   questions,
   onComplete,
-  minutes,
   title = 'Lerncheck',
   description = 'Übertrage das Gelernte auf neue Fragen. Erst dieser Check schließt die Station ab.',
   completeLabel,
@@ -631,20 +619,19 @@ function FinalQuiz({
   unlocked: boolean;
   questions: QuizQuestion[];
   onComplete: () => void;
-  minutes: number;
   title?: string;
   description?: string;
   completeLabel?: string;
 }) {
   return (
     <section aria-label="Abschlussquiz">
-      <PhaseHeading step={3} title="Wissen prüfen" minutes={minutes} icon={ListChecks} />
+      <PhaseHeading step={3} title="Wissen prüfen" icon={ListChecks} />
       {unlocked ? (
         <TaskCard title={title} description={description} icon={ListChecks}>
           <QuizSequence questions={questions} onComplete={onComplete} completeLabel={completeLabel} />
         </TaskCard>
       ) : (
-        <div className="flex min-h-36 items-center gap-4 rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 p-5 text-slate-500">
+        <div className="flex min-h-40 items-center gap-5 rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 p-6 text-slate-500 sm:p-8">
           <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-slate-100"><LockKeyhole className="size-5" aria-hidden="true" /></span>
           <div><p className="font-bold text-slate-800">Der Lerncheck ist noch gesperrt.</p><p className="mt-1 text-sm leading-6">Setze zuerst das Schaubild richtig zusammen. Danach kannst du dein Verständnis prüfen.</p></div>
         </div>
@@ -695,7 +682,6 @@ function LearningStation0({ done, onComplete, onNext }: StationProps) {
       lead="Aus dem bekannten FILIUS-Netz wird nun Schritt für Schritt eine funktionierende Anwendung."
     >
       <IntroBlock
-        minutes={2}
         title="Erreichbar ist noch nicht verständlich"
         paragraphs={[
           'Ein Client kann einen Server über das Netzwerk erreichen. Damit ist aber noch nicht entschieden, welches Programm auf dem Server gemeint ist.',
@@ -705,7 +691,6 @@ function LearningStation0({ done, onComplete, onNext }: StationProps) {
         note="Ein Netzwerk verbindet Rechner. Für eine Anwendung braucht es zusätzlich Port, TCP und eine gemeinsame Sprache."
       />
       <SequenceDiagramTask
-        minutes={4}
         title="Baue den Weg zur Verständigung"
         description="Ordne die vier Bausteine so, wie sie in dieser Lernstrecke aufeinander aufbauen."
         items={nodes}
@@ -716,7 +701,7 @@ function LearningStation0({ done, onComplete, onNext }: StationProps) {
         end={{ label: 'Server', icon: Server }}
         success="Genau: Erst wird der Rechner gefunden, dann der Dienst gewählt, der Transport abgesichert und schließlich die gemeinsame Sprache angewendet."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={4} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Als Nächstes trennen wir Rechner, Dienst und Transport genauer voneinander." />}
     </StationFrame>
   );
@@ -770,7 +755,6 @@ function LearningStation1({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Adresse & Transport" title="Ein Rechner, mehrere Türen" lead="Eine Adresse wie 192.168.1.20:80 enthält zwei verschiedene Entscheidungen: Rechner und Dienst.">
       <IntroBlock
-        minutes={3}
         title="IP und Port bilden gemeinsam den Endpunkt"
         paragraphs={[
           'Die IP-Adresse 192.168.1.20 führt zu einem bestimmten Rechner. Die Portnummer 80 wählt dort den Webserver aus.',
@@ -780,7 +764,6 @@ function LearningStation1({ done, onComplete, onNext }: StationProps) {
         note="IP sagt wohin. Der Port sagt zu welchem Programm. TCP sorgt dafür, dass die Daten geordnet ankommen."
       />
       <SequenceDiagramTask
-        minutes={7}
         title="Setze den Weg aus der Anwendung ins Netz zusammen"
         description="Die Daten wandern schrittweise von der Anwendung bis ins Netzwerk."
         support={serviceCards}
@@ -790,7 +773,7 @@ function LearningStation1({ done, onComplete, onNext }: StationProps) {
         onComplete={() => setDiagramDone(true)}
         success="Richtig. Das Programm nutzt einen Port, TCP übernimmt den Transport, IP adressiert den Rechner und das Netzwerk überträgt die Pakete."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Die Verbindung steht. Nun müssen beide Programme dieselbe Sprache sprechen." />}
     </StationFrame>
   );
@@ -837,7 +820,6 @@ function LearningStation2({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Gemeinsame Sprache" title="Eine Verbindung transportiert. Ein Protokoll erklärt." lead="Technisch verbunden zu sein reicht nicht: Nachrichten brauchen Form, Bedeutung und eine zulässige Reihenfolge.">
       <IntroBlock
-        minutes={3}
         title="Kommunikation braucht gemeinsame Regeln"
         paragraphs={[
           'Zwei Telefone können technisch verbunden sein. Ohne gemeinsame Sprache und Gesprächsregeln entsteht trotzdem keine Verständigung.',
@@ -847,7 +829,6 @@ function LearningStation2({ done, onComplete, onNext }: StationProps) {
         note="TCP transportiert Zeichen. Erst das Protokoll macht daraus verständliche Nachrichten."
       />
       <SequenceDiagramTask
-        minutes={7}
         title="Baue die Arbeitsdefinition"
         description="Ordne die Begriffe zu einer vollständigen Protokoll-Idee."
         support={dialog}
@@ -859,7 +840,7 @@ function LearningStation2({ done, onComplete, onNext }: StationProps) {
         end={{ label: 'Verständigung', icon: CheckCircle2 }}
         success="Genau. Ein Protokoll besteht aus Regeln für Nachrichten, ihre Bedeutung und ihre zulässige Reihenfolge."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Mit HTTP untersuchst du jetzt ein echtes Anwendungsprotokoll." />}
     </StationFrame>
   );
@@ -920,7 +901,6 @@ function LearningStation3({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Web-Kommunikation" title="GET rein. Webseite raus." lead="HTTP zeigt besonders deutlich, wie ein Protokoll eine Anfrage und eine passende Antwort strukturiert.">
       <IntroBlock
-        minutes={3}
         title="Browser und Webserver sprechen HTTP"
         paragraphs={[
           'Der Browser sendet einen Request. Darin stehen unter anderem Methode, Ressource und Protokollversion.',
@@ -930,7 +910,6 @@ function LearningStation3({ done, onComplete, onNext }: StationProps) {
         note="Eine funktionierende TCP-Verbindung versteht noch kein GET. Die Bedeutung liefert HTTP."
       />
       <SequenceDiagramTask
-        minutes={7}
         title="Setze den Webzugriff zusammen"
         description="Untersuche zuerst Request und Response. Ordne danach den vollständigen Ablauf."
         support={explorer}
@@ -942,7 +921,7 @@ function LearningStation3({ done, onComplete, onNext }: StationProps) {
         end={{ label: 'Webseite', icon: Computer }}
         success="Richtig. Der Browser formuliert einen HTTP-Request, TCP transportiert ihn, der Server verarbeitet ihn und sendet eine HTTP-Response zurück."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Als Nächstes zeigt POP3, warum auch Zustände und Reihenfolgen zum Protokoll gehören." />}
     </StationFrame>
   );
@@ -992,7 +971,6 @@ function LearningStation4({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Dialog mit Regeln" title="POP3 ist mehr als eine Befehlsliste" lead="Beim Mailabruf hängt der nächste erlaubte Schritt vom aktuellen Zustand der Sitzung ab.">
       <IntroBlock
-        minutes={3}
         title="Ein Protokoll kann Zustände besitzen"
         paragraphs={[
           'Direkt nach dem Verbindungsaufbau ist der Client noch nicht angemeldet. Erst USER und PASS wechseln die Sitzung in den angemeldeten Zustand.',
@@ -1002,7 +980,6 @@ function LearningStation4({ done, onComplete, onNext }: StationProps) {
         note="Ein Befehl ist nicht nur richtig oder falsch – er kann im aktuellen Zustand erlaubt oder verboten sein."
       />
       <SequenceDiagramTask
-        minutes={11}
         title="Baue den POP3-Dialog"
         description="Die +OK-Antworten sind ausgeblendet. Ordne die fünf Client-Befehle zu einer gültigen Sitzung."
         support={legend}
@@ -1014,7 +991,7 @@ function LearningStation4({ done, onComplete, onNext }: StationProps) {
         end={{ label: 'Beendet', icon: LogOut }}
         success="Richtig. Nach USER und PASS ist der Client angemeldet, kann den Status prüfen, eine Mail abrufen und die Sitzung mit QUIT beenden."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={6} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Jetzt findest du dieselben Netzwerkideen im Java-Code der Klasse Connection wieder." />}
     </StationFrame>
   );
@@ -1072,7 +1049,6 @@ function LearningStation5({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Java-Verbindung" title="Netzwerkbegriffe werden zu Code" lead="Die NRW-Klasse Connection macht aus IP, Port und Nachrichten wenige gut lesbare Methodenaufrufe.">
       <IntroBlock
-        minutes={4}
         title="Connection versteckt die Socket-Details"
         paragraphs={[
           'Intern nutzt Connection einen Socket sowie Ein- und Ausgabeströme. Für die erste Anwendung musst du diese Details noch nicht selbst programmieren.',
@@ -1082,7 +1058,6 @@ function LearningStation5({ done, onComplete, onNext }: StationProps) {
         note="Connection bildet eine bestehende TCP-Verbindung als einfachen Kommunikationskanal für Strings ab."
       />
       <SequenceDiagramTask
-        minutes={10}
         title="Verbinde Code und Kommunikationsablauf"
         description="Tippe zuerst auf farbige Codestellen. Setze danach die vier sichtbaren Schritte zusammen."
         support={codeExplorer}
@@ -1094,7 +1069,7 @@ function LearningStation5({ done, onComplete, onNext }: StationProps) {
         end={{ label: 'Server', icon: Server }}
         success="Richtig. Die Verbindung entsteht zuerst, danach folgen Anfrage und Antwort; am Ende wird der Kanal geschlossen."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={6} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Connection wartet gezielt auf Antworten. Die Klasse Client kann zusätzlich jederzeit auf eintreffende Nachrichten reagieren." />}
     </StationFrame>
   );
@@ -1142,7 +1117,6 @@ function LearningStation6({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Nachrichten empfangen" title="Abfragen oder reagieren?" lead="Nicht jede Anwendung weiß vorher, wann die nächste Nachricht eintreffen wird.">
       <IntroBlock
-        minutes={3}
         title="Zwei passende Modelle für zwei Situationen"
         paragraphs={[
           'Mit Connection arbeitet ein Programm häufig Schritt für Schritt: Es sendet eine Anfrage und ruft receive() auf, wenn es die Antwort erwartet.',
@@ -1152,7 +1126,6 @@ function LearningStation6({ done, onComplete, onNext }: StationProps) {
         note="Wenn Nachrichten jederzeit eintreffen können, braucht das Programm einen dauerhaften Empfangsmechanismus."
       />
       <MatchDiagramTask
-        minutes={7}
         title="Ordne die Kommunikationsmuster"
         description="Wähle eine Szenariokarte und setze sie in den passenden Zielbereich."
         support={comparison}
@@ -1162,7 +1135,7 @@ function LearningStation6({ done, onComplete, onNext }: StationProps) {
         onComplete={() => setDiagramDone(true)}
         success="Richtig. Gezielte Einzelabfragen passen zu Connection; Chat und Spiel benötigen Reaktionen auf spontan eintreffende Nachrichten."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Auf der anderen Seite reagiert der Server auf neue Verbindungen, Nachrichten und Trennungen." />}
     </StationFrame>
   );
@@ -1211,7 +1184,6 @@ function LearningStation7({ done, onComplete, onNext }: StationProps) {
   return (
     <StationFrame kicker="Ereignisse behandeln" title="Der Server reagiert auf drei Momente" lead="Die komplexe Socketverwaltung bleibt verborgen. Die eigene Unterklasse bearbeitet drei verständliche Netzwerkereignisse.">
       <IntroBlock
-        minutes={2}
         title="Der Server wird durch Ereignisse aufgerufen"
         paragraphs={[
           'Mehrere Clients können gleichzeitig mit dem Server verbunden sein. Die NRW-Klasse verwaltet diese Verbindungen intern.',
@@ -1221,7 +1193,6 @@ function LearningStation7({ done, onComplete, onNext }: StationProps) {
         note="Die Methoden werden nicht nacheinander abgespult; sie werden passend zum eintretenden Netzwerkereignis aufgerufen."
       />
       <MatchDiagramTask
-        minutes={5}
         title="Verbinde Ereignis und Methode"
         description="Setze jede Situation in die Methode, die der Server dafür aufruft."
         support={code}
@@ -1231,7 +1202,7 @@ function LearningStation7({ done, onComplete, onNext }: StationProps) {
         onComplete={() => setDiagramDone(true)}
         success="Richtig. Verbindung, Nachricht und Trennung lösen jeweils genau die passende abstrakte Methode aus."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={3} />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} />
       {done && <CompletedBanner onNext={onNext} text="Du kennst jetzt beide Seiten. Im Finale entwirfst du die gemeinsame Sprache selbst." />}
     </StationFrame>
   );
@@ -1294,7 +1265,6 @@ function LearningStation8({ done, onComplete, onNext: _onNext }: StationProps) {
   return (
     <StationFrame kicker="Transfer" title="Jetzt entwirfst du die Sprache" lead="Im Finale entsteht aus Nachrichtentypen, Zuständen und Fehlerregeln ein vollständiger Quizdialog.">
       <IntroBlock
-        minutes={3}
         title="Ein eigenes Protokoll muss eindeutig sein"
         paragraphs={[
           'Der Quizclient meldet einen Namen an, fordert eine Frage an, sendet eine Antwort und beendet später die Verbindung.',
@@ -1304,7 +1274,6 @@ function LearningStation8({ done, onComplete, onNext: _onNext }: StationProps) {
         note="Ein robustes Protokoll beschreibt nicht nur den Idealfall, sondern auch unerlaubte Nachrichten und passende Fehlerantworten."
       />
       <SequenceDiagramTask
-        minutes={7}
         title="Baue einen vollständigen Quizdialog"
         description="Ordne abwechselnd Client- und Servernachrichten von der Anmeldung bis zum Abschied."
         support={protocolCards}
@@ -1314,7 +1283,7 @@ function LearningStation8({ done, onComplete, onNext: _onNext }: StationProps) {
         onComplete={() => setDiagramDone(true)}
         success="Richtig. Der Dialog besitzt eine Anmeldung, eine Frage-Antwort-Runde und einen geregelten Abschluss."
       />
-      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} title="Protokoll-Check" description="Prüfe Syntax, Ablauf und Fehlerbehandlung deines Quizprotokolls." completeLabel="Protokoll festlegen" />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} title="Protokoll-Check" description="Prüfe Syntax, Ablauf und Fehlerbehandlung deines Quizprotokolls." completeLabel="Protokoll festlegen" />
       {done && (
         <>
           <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
@@ -1461,20 +1430,16 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[310px_minmax(0,1fr)]">
+      <div className="mx-auto grid max-w-[1600px] lg:grid-cols-[290px_minmax(0,1fr)]">
         <aside className="border-b bg-slate-950 text-slate-200 lg:min-h-[calc(100vh-65px)] lg:border-b-0 lg:border-r lg:border-white/10">
-          <div className="hidden border-b border-white/10 px-5 py-4 lg:block">
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Zeitplan</p>
-            <p className="mt-1 text-sm font-bold text-slate-200">3 × 45 Min. · insgesamt 135 Min.</p>
-          </div>
-          <div className="flex gap-2 overflow-x-auto p-3 lg:block lg:space-y-2 lg:p-5">
-            {stations.map(([eyebrow, title, duration], index) => {
+          <div className="flex gap-2 overflow-x-auto p-3 lg:block lg:space-y-3 lg:p-5">
+            {stations.map(([eyebrow, title], index) => {
               const active = currentStation === index;
               const done = completed.includes(index);
               return (
-                <button key={title} type="button" onClick={() => navigate(index)} className={`group flex min-h-16 min-w-[230px] items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition lg:w-full lg:min-w-0 ${active ? 'border-cyan-300/50 bg-cyan-300/10' : 'border-transparent hover:border-white/10 hover:bg-white/5'}`} aria-current={active ? 'step' : undefined}>
-                  <span className={`grid size-8 shrink-0 place-items-center rounded-lg font-mono text-xs font-bold ${done ? 'bg-emerald-300 text-slate-950' : active ? 'bg-cyan-300 text-slate-950' : 'bg-white/8 text-slate-400'}`}>{done ? <Check className="size-4" /> : index}</span>
-                  <span className="min-w-0"><span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">{eyebrow}</span><span className="block truncate text-sm font-semibold text-slate-100">{title}</span><span className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3" /> {duration}</span></span>
+                <button key={title} type="button" onClick={() => navigate(index)} className={`group flex min-h-18 min-w-[230px] items-center gap-3 rounded-xl border px-4 py-3 text-left transition lg:w-full lg:min-w-0 ${active ? 'border-cyan-300/50 bg-cyan-300/10' : 'border-transparent hover:border-white/10 hover:bg-white/5'}`} aria-current={active ? 'step' : undefined}>
+                  <span className={`grid size-9 shrink-0 place-items-center rounded-lg font-mono text-xs font-bold ${done ? 'bg-emerald-300 text-slate-950' : active ? 'bg-cyan-300 text-slate-950' : 'bg-white/8 text-slate-400'}`}>{done ? <Check className="size-4" /> : index}</span>
+                  <span className="min-w-0"><span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">{eyebrow}</span><span className="mt-1 block truncate text-sm font-semibold text-slate-100">{title}</span></span>
                 </button>
               );
             })}
@@ -1484,18 +1449,17 @@ export default function Home() {
           </div>
         </aside>
 
-        <section className="relative min-w-0 overflow-hidden px-4 py-6 sm:px-7 sm:py-10 lg:px-12">
+        <section className="relative min-w-0 overflow-hidden px-5 py-8 sm:px-8 sm:py-12 lg:px-14 lg:py-14 xl:px-16">
           <div className="pointer-events-none absolute right-0 top-0 -z-0 h-96 w-96 rounded-full bg-cyan-200/20 blur-3xl" />
-          <div className="relative z-10 mx-auto max-w-4xl">
-            <div className="mb-6 flex flex-wrap items-center gap-2">
+          <div className="relative z-10 mx-auto max-w-5xl">
+            <div className="mb-10 flex flex-wrap items-center gap-2">
               <Badge className="h-7 bg-slate-950 px-3 text-white">Station {currentStation} von 8</Badge>
-              <Badge variant="outline" className="h-7 gap-1.5 bg-white px-3"><Clock3 className="size-3" /> {stations[currentStation][2]}</Badge>
               {completed.includes(currentStation) && <Badge className="h-7 gap-1.5 bg-emerald-600 px-3 text-white"><Check className="size-3" /> erledigt</Badge>}
             </div>
 
             {stationContent()}
 
-            <nav className="mt-10 flex items-center justify-between gap-3 border-t border-slate-200 py-6" aria-label="Stationsnavigation">
+            <nav className="mt-16 flex items-center justify-between gap-4 border-t border-slate-200 py-8" aria-label="Stationsnavigation">
               <Button variant="outline" size="lg" disabled={currentStation === 0} onClick={() => navigate(currentStation - 1)} className="min-h-12 rounded-xl"><ArrowLeft className="size-4" /> <span className="hidden sm:inline">Zurück</span></Button>
               <p className="text-center text-xs text-slate-500">Fortschritt bleibt nur auf diesem Gerät.</p>
               <Button variant="outline" size="lg" disabled={currentStation === 8} onClick={() => navigate(currentStation + 1)} className="min-h-12 rounded-xl"><span className="hidden sm:inline">Weiter</span> <ArrowRight className="size-4" /></Button>
