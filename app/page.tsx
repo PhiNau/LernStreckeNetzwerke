@@ -64,7 +64,7 @@ function Feedback({
 }) {
   return (
     <output
-      className={`mt-5 rounded-xl border p-4 ${
+      className={`mt-5 block w-full rounded-xl border p-4 ${
         correct
           ? 'border-emerald-200 bg-emerald-50'
           : 'border-amber-200 bg-amber-50'
