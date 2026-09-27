@@ -4,15 +4,40 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpen,
+  Braces,
+  Cable,
   Check,
   CheckCircle2,
   CircleAlert,
+  CircleDot,
   Clock3,
   Code2,
+  Computer,
+  FileCode2,
+  Globe2,
+  Inbox,
   Lightbulb,
+  ListChecks,
+  LockKeyhole,
+  LogIn,
+  LogOut,
+  Mail,
+  MessageSquare,
+  MousePointerClick,
   Network,
+  PackageCheck,
   RotateCcw,
+  Router,
+  Send,
+  Server,
+  ShieldCheck,
+  Smartphone,
   Sparkles,
+  Terminal,
+  UserRound,
+  Workflow,
+  type LucideIcon,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -30,15 +55,15 @@ import {
 } from '@/components/ui/progress';
 
 const stations = [
-  ['Startsignal', 'FILIUS kennt ihr schon', '5 min'],
-  ['Adresse & Transport', 'IP, Port und TCP', '15 min'],
-  ['Gemeinsame Sprache', 'Was ist ein Protokoll?', '15 min'],
-  ['Web-Kommunikation', 'HTTP verstehen', '15 min'],
-  ['Dialog mit Regeln', 'POP3 analysieren', '20 min'],
-  ['Java-Verbindung', 'Die Klasse Connection', '20 min'],
-  ['Nachrichten empfangen', 'Connection oder Client?', '15 min'],
-  ['Ereignisse behandeln', 'Was macht der Server?', '15 min'],
-  ['Transfer', 'Dein eigenes Protokoll', '25 min'],
+  ['Startsignal', 'FILIUS kennt ihr schon', '10 Min.'],
+  ['Adresse & Transport', 'IP, Port und TCP', '15 Min.'],
+  ['Gemeinsame Sprache', 'Was ist ein Protokoll?', '15 Min.'],
+  ['Web-Kommunikation', 'HTTP verstehen', '15 Min.'],
+  ['Dialog mit Regeln', 'POP3 analysieren', '20 Min.'],
+  ['Java-Verbindung', 'Die Klasse Connection', '20 Min.'],
+  ['Nachrichten empfangen', 'Connection oder Client?', '15 Min.'],
+  ['Ereignisse behandeln', 'Was macht der Server?', '10 Min.'],
+  ['Transfer', 'Dein eigenes Protokoll', '15 Min.'],
 ] as const;
 
 type QuizQuestion = {
@@ -53,6 +78,27 @@ type StationProps = {
   done: boolean;
   onComplete: () => void;
   onNext: () => void;
+};
+
+type DiagramNode = {
+  id: string;
+  label: string;
+  caption: string;
+  icon: LucideIcon;
+};
+
+type MatchCategory = {
+  id: string;
+  label: string;
+  caption: string;
+  icon: LucideIcon;
+};
+
+type MatchItem = {
+  id: string;
+  label: string;
+  target: string;
+  icon: LucideIcon;
 };
 
 function Feedback({
@@ -81,7 +127,6 @@ function Feedback({
     </output>
   );
 }
-
 function QuizSequence({
   questions,
   onComplete,
@@ -176,108 +221,6 @@ function QuizSequence({
   );
 }
 
-function SortTask({
-  items,
-  correctOrder,
-  onComplete,
-  label,
-}: {
-  items: string[];
-  correctOrder: string[];
-  onComplete: () => void;
-  label: string;
-}) {
-  const [pool, setPool] = useState(items);
-  const [ordered, setOrdered] = useState<string[]>([]);
-  const [checked, setChecked] = useState(false);
-  const correct =
-    checked && ordered.every((item, index) => item === correctOrder[index]);
-
-  function add(item: string) {
-    if (checked) return;
-    setPool((value) => value.filter((entry) => entry !== item));
-    setOrdered((value) => [...value, item]);
-  }
-
-  function reset() {
-    setPool(items);
-    setOrdered([]);
-    setChecked(false);
-  }
-
-  function check() {
-    setChecked(true);
-    if (ordered.every((item, index) => item === correctOrder[index])) {
-      onComplete();
-    }
-  }
-
-  return (
-    <div>
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
-        Klick-Sortierung
-      </p>
-      <h2 className="mt-2 text-2xl font-bold text-slate-950">{label}</h2>
-      <p className="mt-2 text-sm leading-6 text-slate-600">
-        Tippe die Elemente nacheinander in der richtigen Reihenfolge an.
-      </p>
-      <div className="mt-5 min-h-24 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 p-3">
-        {ordered.length === 0 ? (
-          <p className="grid min-h-16 place-items-center text-sm text-slate-400">
-            Deine Reihenfolge erscheint hier.
-          </p>
-        ) : (
-          <ol className="space-y-2">
-            {ordered.map((item, index) => (
-              <li
-                key={item}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-800"
-              >
-                <span className="grid size-7 shrink-0 place-items-center rounded-md bg-slate-950 font-mono text-xs text-cyan-300">
-                  {index + 1}
-                </span>
-                <code className="whitespace-pre-wrap font-mono">{item}</code>
-              </li>
-            ))}
-          </ol>
-        )}
-      </div>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        {pool.map((item) => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => add(item)}
-            className="min-h-12 rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-left font-mono text-sm font-bold text-slate-800 transition hover:border-cyan-300 hover:bg-cyan-50"
-          >
-            {item}
-          </button>
-        ))}
-      </div>
-      <div className="mt-5 flex flex-wrap justify-between gap-3">
-        <Button variant="outline" size="lg" onClick={reset} className="min-h-12 rounded-xl">
-          <RotateCcw className="size-4" /> Neu sortieren
-        </Button>
-        <Button
-          size="lg"
-          onClick={check}
-          disabled={ordered.length !== items.length}
-          className="min-h-12 rounded-xl bg-slate-950 px-5 text-white"
-        >
-          Reihenfolge prüfen <Check className="size-4" />
-        </Button>
-      </div>
-      {checked && (
-        <Feedback correct={correct}>
-          {correct
-            ? 'Die Reihenfolge stimmt. Nicht nur die Befehle, auch ihr zulässiger Ablauf gehört zum Protokoll.'
-            : 'Die Reihenfolge passt noch nicht. Setze zurück und achte auf Anmeldung, Aktion und Abschluss.'}
-        </Feedback>
-      )}
-    </div>
-  );
-}
-
 function StationFrame({
   kicker,
   title,
@@ -311,17 +254,19 @@ function TaskCard({
   title,
   description,
   children,
+  icon: Icon = Lightbulb,
 }: {
   title: string;
   description: string;
   children: React.ReactNode;
+  icon?: LucideIcon;
 }) {
   return (
     <Card className="border-0 bg-white shadow-[0_24px_70px_rgba(15,23,42,.10)] ring-slate-200">
       <CardHeader className="border-b border-slate-100 sm:px-7 sm:py-6">
         <div className="flex items-start gap-3">
           <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-amber-100 text-amber-800">
-            <Lightbulb className="size-5" aria-hidden="true" />
+            <Icon className="size-5" aria-hidden="true" />
           </div>
           <div>
             <CardTitle className="text-xl font-bold text-slate-950">
@@ -355,70 +300,430 @@ function CompletedBanner({ onNext, text }: { onNext: () => void; text: string })
   );
 }
 
-function Station0({ done, onComplete, onNext }: StationProps) {
+function PhaseHeading({
+  step,
+  title,
+  minutes,
+  icon: Icon,
+}: {
+  step: 1 | 2 | 3;
+  title: string;
+  minutes: number;
+  icon: LucideIcon;
+}) {
+  return (
+    <div className="mb-3 mt-8 flex flex-wrap items-center gap-3 first:mt-0">
+      <span className="grid size-9 place-items-center rounded-xl bg-slate-950 font-mono text-xs font-black text-cyan-300">
+        {step}
+      </span>
+      <div>
+        <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-teal-700">
+          <Icon className="size-4" aria-hidden="true" /> Schritt {step} von 3
+        </p>
+        <h2 className="mt-0.5 text-xl font-black text-slate-950">{title}</h2>
+      </div>
+      <Badge variant="outline" className="ml-auto h-7 gap-1.5 bg-white px-3 text-slate-600">
+        <Clock3 className="size-3" /> ca. {minutes} Min.
+      </Badge>
+    </div>
+  );
+}
+
+function IntroBlock({
+  title,
+  paragraphs,
+  facts,
+  note,
+  minutes,
+  children,
+}: {
+  title: string;
+  paragraphs: string[];
+  facts: string[];
+  note: string;
+  minutes: number;
+  children?: React.ReactNode;
+}) {
+  return (
+    <section aria-label="Einführung">
+      <PhaseHeading step={1} title="Verstehen" minutes={minutes} icon={BookOpen} />
+      <Card className="overflow-hidden border-0 bg-white shadow-[0_18px_55px_rgba(15,23,42,.08)] ring-slate-200">
+        <CardContent className="p-5 sm:p-7">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Kurz erklärt</p>
+              <h3 className="mt-2 text-2xl font-black tracking-tight text-slate-950">{title}</h3>
+              <div className="mt-4 space-y-3 text-sm leading-6 text-slate-650 sm:text-base">
+                {paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              </div>
+            </div>
+            <div className="rounded-2xl bg-slate-950 p-4 text-slate-100 sm:p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-cyan-300">Darauf kommt es an</p>
+              <ul className="mt-4 space-y-3">
+                {facts.map((fact) => (
+                  <li key={fact} className="flex gap-3 text-sm leading-5">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-300" aria-hidden="true" />
+                    <span>{fact}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {children}
+          <div className="mt-6 flex gap-3 rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950">
+            <Lightbulb className="mt-0.5 size-5 shrink-0 text-cyan-700" aria-hidden="true" />
+            <p><strong>Merksatz:</strong> {note}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+  );
+}
+
+function DiagramEndpoint({ endpoint }: { endpoint: { label: string; icon: LucideIcon } }) {
+  const Icon = endpoint.icon;
+  return (
+    <div className="flex min-h-24 min-w-28 flex-col items-center justify-center rounded-xl bg-slate-950 p-3 text-center text-white">
+      <Icon className="size-6 text-cyan-300" aria-hidden="true" />
+      <span className="mt-2 text-xs font-bold">{endpoint.label}</span>
+    </div>
+  );
+}
+
+function SequenceDiagramTask({
+  title,
+  description,
+  items,
+  correctOrder,
+  onComplete,
+  completed,
+  minutes,
+  start,
+  end,
+  success,
+  support,
+}: {
+  title: string;
+  description: string;
+  items: DiagramNode[];
+  correctOrder: string[];
+  onComplete: () => void;
+  completed: boolean;
+  minutes: number;
+  start?: { label: string; icon: LucideIcon };
+  end?: { label: string; icon: LucideIcon };
+  success: string;
+  support?: React.ReactNode;
+}) {
+  const [ordered, setOrdered] = useState<string[]>(completed ? correctOrder : []);
+  const [checked, setChecked] = useState(completed);
+  const correct = checked && ordered.join('|') === correctOrder.join('|');
+  const available = items.filter((item) => !ordered.includes(item.id));
+
+  function add(id: string) {
+    if (correct) return;
+    setOrdered((value) => [...value, id]);
+    setChecked(false);
+  }
+
+  function remove(id: string) {
+    if (correct) return;
+    setOrdered((value) => value.filter((item) => item !== id));
+    setChecked(false);
+  }
+
+  function reset() {
+    setOrdered([]);
+    setChecked(false);
+  }
+
+  function check() {
+    setChecked(true);
+    if (ordered.join('|') === correctOrder.join('|')) onComplete();
+  }
+
+  return (
+    <section aria-label="Interaktives Schaubild">
+      <PhaseHeading step={2} title="Schaubild zusammensetzen" minutes={minutes} icon={Workflow} />
+      <TaskCard title={title} description={description} icon={MousePointerClick}>
+        {support}
+        <div className="mt-5 overflow-x-auto rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-3 sm:p-4">
+          <div className="flex min-h-28 flex-col items-stretch justify-center gap-2 xl:w-max xl:min-w-full xl:flex-row xl:items-center">
+            {start && <DiagramEndpoint endpoint={start} />}
+            {start && <ArrowRight className="mx-auto size-5 shrink-0 rotate-90 text-slate-300 xl:rotate-0" aria-hidden="true" />}
+            {ordered.length === 0 && (
+              <div className="grid min-h-24 min-w-36 flex-1 place-items-center rounded-xl border border-slate-200 bg-white px-4 text-center text-sm text-slate-400">
+                Bausteine unten antippen
+              </div>
+            )}
+            {ordered.map((id, index) => {
+              const item = items.find((entry) => entry.id === id)!;
+              const Icon = item.icon;
+              return (
+                <div key={id} className="contents">
+                  {index > 0 && <ArrowRight className="mx-auto size-5 shrink-0 rotate-90 text-slate-300 xl:rotate-0" aria-hidden="true" />}
+                  <button
+                    type="button"
+                    onClick={() => remove(id)}
+                    disabled={correct}
+                    className="group flex min-h-24 min-w-28 flex-1 flex-col items-center justify-center rounded-xl border-2 border-cyan-200 bg-white p-3 text-center transition hover:border-rose-300 disabled:cursor-default disabled:hover:border-cyan-200"
+                    aria-label={`${item.label} aus dem Schaubild entfernen`}
+                  >
+                    <Icon className="size-6 text-teal-700" aria-hidden="true" />
+                    <span className="mt-2 text-xs font-black text-slate-900">{item.label}</span>
+                    <span className="mt-1 text-[11px] leading-4 text-slate-500">{item.caption}</span>
+                  </button>
+                </div>
+              );
+            })}
+            {end && <ArrowRight className="mx-auto size-5 shrink-0 rotate-90 text-slate-300 xl:rotate-0" aria-hidden="true" />}
+            {end && <DiagramEndpoint endpoint={end} />}
+          </div>
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {available.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => add(item.id)}
+                className="flex min-h-14 items-center gap-3 rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-left transition hover:border-cyan-300 hover:bg-cyan-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-200"
+              >
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-700"><Icon className="size-5" aria-hidden="true" /></span>
+                <span><span className="block text-sm font-black text-slate-900">{item.label}</span><span className="block text-xs leading-4 text-slate-500">{item.caption}</span></span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="mt-5 flex flex-wrap justify-between gap-3">
+          <Button variant="outline" size="lg" onClick={reset} disabled={correct} className="min-h-12 rounded-xl">
+            <RotateCcw className="size-4" /> Neu aufbauen
+          </Button>
+          <Button size="lg" onClick={check} disabled={ordered.length !== items.length || correct} className="min-h-12 rounded-xl bg-slate-950 px-5 text-white">
+            Schaubild prüfen <Check className="size-4" />
+          </Button>
+        </div>
+        {checked && (
+          <Feedback correct={correct}>
+            {correct ? success : 'Die Bausteine sind vollständig, aber noch nicht richtig angeordnet. Entferne einzelne Karten und versuche es erneut.'}
+          </Feedback>
+        )}
+      </TaskCard>
+    </section>
+  );
+}
+
+function MatchDiagramTask({
+  title,
+  description,
+  categories,
+  items,
+  onComplete,
+  completed,
+  minutes,
+  success,
+  support,
+}: {
+  title: string;
+  description: string;
+  categories: MatchCategory[];
+  items: MatchItem[];
+  onComplete: () => void;
+  completed: boolean;
+  minutes: number;
+  success: string;
+  support?: React.ReactNode;
+}) {
+  const initialPlacements = Object.fromEntries(items.map((item) => [item.id, item.target]));
+  const [placements, setPlacements] = useState<Record<string, string>>(completed ? initialPlacements : {});
+  const [active, setActive] = useState<string | null>(null);
+  const [checked, setChecked] = useState(completed);
+  const correct = checked && items.every((item) => placements[item.id] === item.target);
+  const available = items.filter((item) => !placements[item.id]);
+
+  function place(categoryId: string) {
+    if (!active || correct) return;
+    setPlacements((value) => ({ ...value, [active]: categoryId }));
+    setActive(null);
+    setChecked(false);
+  }
+
+  function remove(id: string) {
+    if (correct) return;
+    setPlacements((value) => {
+      const next = { ...value };
+      delete next[id];
+      return next;
+    });
+    setChecked(false);
+  }
+
+  function reset() {
+    setPlacements({});
+    setActive(null);
+    setChecked(false);
+  }
+
+  function check() {
+    setChecked(true);
+    if (items.every((item) => placements[item.id] === item.target)) onComplete();
+  }
+
+  return (
+    <section aria-label="Interaktives Zuordnungsschaubild">
+      <PhaseHeading step={2} title="Schaubild zusammensetzen" minutes={minutes} icon={Workflow} />
+      <TaskCard title={title} description={description} icon={MousePointerClick}>
+        {support}
+        <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">1. Karte wählen</p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {available.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button key={item.id} type="button" onClick={() => setActive(item.id)} className={`flex min-h-14 items-center gap-3 rounded-xl border-2 px-3 py-2 text-left transition ${active === item.id ? 'border-cyan-400 bg-cyan-50 ring-4 ring-cyan-100' : 'border-slate-200 bg-white hover:border-cyan-300'}`}>
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-700"><Icon className="size-5" aria-hidden="true" /></span>
+                <span className="text-sm font-bold text-slate-900">{item.label}</span>
+              </button>
+            );
+          })}
+          {available.length === 0 && <p className="col-span-full rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Alle Karten sind eingesetzt. Prüfe jetzt das Schaubild.</p>}
+        </div>
+        <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">2. Zielbereich wählen</p>
+        <div className={`mt-3 grid gap-3 ${categories.length === 3 ? 'lg:grid-cols-3' : 'sm:grid-cols-2'}`}>
+          {categories.map((category) => {
+            const Icon = category.icon;
+            const placed = items.filter((item) => placements[item.id] === category.id);
+            return (
+              <div key={category.id} className="min-h-40 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-3">
+                <button type="button" onClick={() => place(category.id)} disabled={!active || correct} className="flex min-h-14 w-full items-center gap-3 rounded-xl p-1 text-left transition enabled:hover:bg-cyan-100 disabled:cursor-default">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-slate-950 text-cyan-300"><Icon className="size-5" aria-hidden="true" /></span>
+                  <span><span className="block font-black text-slate-950">{category.label}</span><span className="block text-xs leading-4 text-slate-500">{category.caption}</span></span>
+                </button>
+                <div className="mt-3 space-y-2">
+                  {placed.map((item) => {
+                    const ItemIcon = item.icon;
+                    return <button key={item.id} type="button" onClick={() => remove(item.id)} disabled={correct} className="flex min-h-11 w-full items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-left text-sm font-semibold text-slate-800 transition enabled:hover:border-rose-300"><ItemIcon className="size-4 shrink-0 text-teal-700" />{item.label}</button>;
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-5 flex flex-wrap justify-between gap-3">
+          <Button variant="outline" size="lg" onClick={reset} disabled={correct} className="min-h-12 rounded-xl"><RotateCcw className="size-4" /> Neu zuordnen</Button>
+          <Button size="lg" onClick={check} disabled={Object.keys(placements).length !== items.length || correct} className="min-h-12 rounded-xl bg-slate-950 px-5 text-white">Schaubild prüfen <Check className="size-4" /></Button>
+        </div>
+        {checked && <Feedback correct={correct}>{correct ? success : 'Noch nicht ganz. Prüfe, welches Ereignis oder Kommunikationsmuster zu welchem Zielbereich gehört.'}</Feedback>}
+      </TaskCard>
+    </section>
+  );
+}
+
+function FinalQuiz({
+  unlocked,
+  questions,
+  onComplete,
+  minutes,
+  title = 'Lerncheck',
+  description = 'Übertrage das Gelernte auf neue Fragen. Erst dieser Check schließt die Station ab.',
+  completeLabel,
+}: {
+  unlocked: boolean;
+  questions: QuizQuestion[];
+  onComplete: () => void;
+  minutes: number;
+  title?: string;
+  description?: string;
+  completeLabel?: string;
+}) {
+  return (
+    <section aria-label="Abschlussquiz">
+      <PhaseHeading step={3} title="Wissen prüfen" minutes={minutes} icon={ListChecks} />
+      {unlocked ? (
+        <TaskCard title={title} description={description} icon={ListChecks}>
+          <QuizSequence questions={questions} onComplete={onComplete} completeLabel={completeLabel} />
+        </TaskCard>
+      ) : (
+        <div className="flex min-h-36 items-center gap-4 rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 p-5 text-slate-500">
+          <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-slate-100"><LockKeyhole className="size-5" aria-hidden="true" /></span>
+          <div><p className="font-bold text-slate-800">Der Lerncheck ist noch gesperrt.</p><p className="mt-1 text-sm leading-6">Setze zuerst das Schaubild richtig zusammen. Danach kannst du dein Verständnis prüfen.</p></div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function LearningStation0({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const questions: QuizQuestion[] = [
     {
-      prompt: '„Bestimmt den Zielrechner.“',
+      prompt: 'Was bestimmt den Zielrechner?',
       options: ['IP-Adresse', 'Port', 'TCP', 'Protokoll'],
       answer: 'IP-Adresse',
       success: 'Richtig. Die IP-Adresse identifiziert den Rechner im Netzwerk.',
     },
     {
-      prompt: '„Bestimmt den Dienst auf dem Zielrechner.“',
+      prompt: 'Was bestimmt den Dienst auf dem Zielrechner?',
       options: ['IP-Adresse', 'Port', 'TCP', 'Protokoll'],
       answer: 'Port',
       success: 'Genau. Der Port wählt das konkrete Programm oder den Dienst aus.',
     },
     {
-      prompt: '„Stellt eine zuverlässige Verbindung bereit.“',
+      prompt: 'Was stellt eine zuverlässige Verbindung bereit?',
       options: ['IP-Adresse', 'Port', 'TCP', 'Protokoll'],
       answer: 'TCP',
       success: 'Richtig. TCP sorgt für eine geordnete, zuverlässige Übertragung.',
     },
     {
-      prompt: '„Legt Bedeutung und Reihenfolge von Nachrichten fest.“',
+      prompt: 'Was legt Bedeutung und Reihenfolge von Nachrichten fest?',
       options: ['IP-Adresse', 'Port', 'TCP', 'Protokoll'],
       answer: 'Protokoll',
       success: 'Genau. Ein Protokoll ist die gemeinsame Sprache der Programme.',
     },
+  ];
+  const nodes: DiagramNode[] = [
+    { id: 'protocol', label: 'Protokoll', caption: 'Bedeutung klären', icon: MessageSquare },
+    { id: 'tcp', label: 'TCP', caption: 'Transport sichern', icon: PackageCheck },
+    { id: 'ip', label: 'IP-Adresse', caption: 'Rechner finden', icon: Router },
+    { id: 'port', label: 'Port', caption: 'Dienst auswählen', icon: CircleDot },
   ];
 
   return (
     <StationFrame
       kicker="Startsignal"
       title="Verbunden. Aber verstehen sich die Programme?"
-      lead="Ein Client erreicht den Server. Jetzt fehlen noch zwei Dinge: die richtige Anwendung – und eine gemeinsame Sprache."
+      lead="Aus dem bekannten FILIUS-Netz wird nun Schritt für Schritt eine funktionierende Anwendung."
     >
-      <div className="mb-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-        <div className="rounded-xl bg-slate-950 p-3 text-center font-mono text-sm font-bold text-cyan-300">
-          CLIENT
-        </div>
-        <div className="flex items-center gap-1" aria-hidden="true">
-          <span className="size-1.5 rounded-full bg-cyan-400" />
-          <span className="size-1.5 rounded-full bg-cyan-400" />
-          <span className="size-1.5 rounded-full bg-cyan-400" />
-        </div>
-        <div className="rounded-xl border-2 border-slate-950 p-3 text-center font-mono text-sm font-bold text-slate-950">
-          SERVER
-        </div>
-      </div>
-      <TaskCard
-        title="Vier Bausteine, vier Aufgaben"
-        description="Tippe auf den passenden Begriff. Du bekommst sofort eine Erklärung."
-      >
-        <QuizSequence questions={questions} onComplete={onComplete} />
-      </TaskCard>
-      {done && (
-        <CompletedBanner
-          onNext={onNext}
-          text="Als Nächstes trennen wir Rechner, Dienst und Transport genauer voneinander."
-        />
-      )}
+      <IntroBlock
+        minutes={2}
+        title="Erreichbar ist noch nicht verständlich"
+        paragraphs={[
+          'Ein Client kann einen Server über das Netzwerk erreichen. Damit ist aber noch nicht entschieden, welches Programm auf dem Server gemeint ist.',
+          'Selbst wenn die technische Verbindung steht, müssen beide Programme dieselben Nachrichten und Regeln kennen.',
+        ]}
+        facts={['IP-Adresse findet den Rechner.', 'Port findet den Dienst.', 'TCP transportiert zuverlässig.', 'Ein Protokoll schafft Bedeutung.']}
+        note="Ein Netzwerk verbindet Rechner. Für eine Anwendung braucht es zusätzlich Port, TCP und eine gemeinsame Sprache."
+      />
+      <SequenceDiagramTask
+        minutes={4}
+        title="Baue den Weg zur Verständigung"
+        description="Ordne die vier Bausteine so, wie sie in dieser Lernstrecke aufeinander aufbauen."
+        items={nodes}
+        correctOrder={['ip', 'port', 'tcp', 'protocol']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        start={{ label: 'Client', icon: Smartphone }}
+        end={{ label: 'Server', icon: Server }}
+        success="Genau: Erst wird der Rechner gefunden, dann der Dienst gewählt, der Transport abgesichert und schließlich die gemeinsame Sprache angewendet."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={4} />
+      {done && <CompletedBanner onNext={onNext} text="Als Nächstes trennen wir Rechner, Dienst und Transport genauer voneinander." />}
     </StationFrame>
   );
 }
 
-function Station1({ done, onComplete, onNext }: StationProps) {
+function LearningStation1({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const questions: QuizQuestion[] = [
     {
       prompt: 'Was bezeichnet in 10.0.0.15:110 die Angabe 10.0.0.15?',
@@ -439,42 +744,60 @@ function Station1({ done, onComplete, onNext }: StationProps) {
       success: 'Richtig. Ein Rechner kann viele Dienste über verschiedene Ports anbieten.',
     },
   ];
+  const nodes: DiagramNode[] = [
+    { id: 'ip', label: 'IP', caption: 'Zielrechner', icon: Router },
+    { id: 'program', label: 'Programm', caption: 'erzeugt Daten', icon: Terminal },
+    { id: 'network', label: 'Netzwerk', caption: 'überträgt Pakete', icon: Network },
+    { id: 'tcp', label: 'TCP', caption: 'ordnet & sichert', icon: PackageCheck },
+    { id: 'port', label: 'Port', caption: 'ordnet Dienst zu', icon: CircleDot },
+  ];
+  const serviceCards = (
+    <div className="mb-6 grid grid-cols-2 gap-2 lg:grid-cols-4">
+      {[
+        ['80', 'HTTP'],
+        ['443', 'HTTPS'],
+        ['110', 'POP3'],
+        ['5000', 'Java-App'],
+      ].map(([port, service]) => (
+        <div key={port} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-center">
+          <p className="font-mono text-lg font-black text-slate-950">:{port}</p>
+          <p className="mt-1 text-xs font-bold text-teal-700">{service}</p>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
-    <StationFrame
-      kicker="Adresse & Transport"
-      title="Ein Rechner, mehrere Türen"
-      lead="Die IP-Adresse bringt Daten zum richtigen Rechner. Der Port ist die nummerierte Tür zur richtigen Anwendung."
-    >
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          ['80', 'Webserver', 'HTTP'],
-          ['443', 'Webserver', 'HTTPS'],
-          ['110', 'Mailserver', 'POP3'],
-          ['5000', 'Java-Programm', 'eigen'],
-        ].map(([port, service, kind]) => (
-          <div key={port} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="font-mono text-2xl font-black text-slate-950">:{port}</p>
-            <p className="mt-1 text-sm font-bold text-slate-700">{service}</p>
-            <Badge variant="outline" className="mt-3 bg-slate-50">{kind}</Badge>
-          </div>
-        ))}
-      </div>
-      <div className="mb-6 rounded-2xl bg-slate-950 p-5 text-slate-200 sm:flex sm:items-center sm:gap-5">
-        <div className="mb-3 grid size-12 place-items-center rounded-xl bg-cyan-300 font-mono font-black text-slate-950 sm:mb-0">TCP</div>
-        <p className="text-sm leading-6">
-          TCP baut die Verbindung auf, hält Daten in der richtigen Reihenfolge und lässt verlorene Daten erneut übertragen.
-        </p>
-      </div>
-      <TaskCard title="Analysiere einen Endpunkt" description="Trenne Rechner, Dienst und Transport sauber voneinander.">
-        <QuizSequence questions={questions} onComplete={onComplete} />
-      </TaskCard>
+    <StationFrame kicker="Adresse & Transport" title="Ein Rechner, mehrere Türen" lead="Eine Adresse wie 192.168.1.20:80 enthält zwei verschiedene Entscheidungen: Rechner und Dienst.">
+      <IntroBlock
+        minutes={3}
+        title="IP und Port bilden gemeinsam den Endpunkt"
+        paragraphs={[
+          'Die IP-Adresse 192.168.1.20 führt zu einem bestimmten Rechner. Die Portnummer 80 wählt dort den Webserver aus.',
+          'TCP baut zwischen den beiden Programmen eine Verbindung auf, hält Daten in Reihenfolge und sorgt bei Verlust für eine erneute Übertragung.',
+        ]}
+        facts={['Viele Dienste teilen sich eine IP-Adresse.', 'Ports unterscheiden diese Dienste.', 'TCP kümmert sich um zuverlässigen Transport.']}
+        note="IP sagt wohin. Der Port sagt zu welchem Programm. TCP sorgt dafür, dass die Daten geordnet ankommen."
+      />
+      <SequenceDiagramTask
+        minutes={7}
+        title="Setze den Weg aus der Anwendung ins Netz zusammen"
+        description="Die Daten wandern schrittweise von der Anwendung bis ins Netzwerk."
+        support={serviceCards}
+        items={nodes}
+        correctOrder={['program', 'port', 'tcp', 'ip', 'network']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        success="Richtig. Das Programm nutzt einen Port, TCP übernimmt den Transport, IP adressiert den Rechner und das Netzwerk überträgt die Pakete."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
       {done && <CompletedBanner onNext={onNext} text="Die Verbindung steht. Nun müssen beide Programme dieselbe Sprache sprechen." />}
     </StationFrame>
   );
 }
 
-function Station2({ done, onComplete, onNext }: StationProps) {
+function LearningStation2({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const questions: QuizQuestion[] = [
     {
       prompt: 'Ein Netzwerkprotokoll ist eine Menge von …',
@@ -495,38 +818,61 @@ function Station2({ done, onComplete, onNext }: StationProps) {
       success: 'Richtig. Die Reihenfolge kann entscheiden, ob eine Nachricht zulässig ist.',
     },
   ];
+  const nodes: DiagramNode[] = [
+    { id: 'order', label: 'Reihenfolge', caption: 'Wann ist etwas erlaubt?', icon: ListChecks },
+    { id: 'rules', label: 'Regeln', caption: 'gemeinsame Vereinbarung', icon: ShieldCheck },
+    { id: 'meaning', label: 'Bedeutung', caption: 'Was heißt die Nachricht?', icon: BookOpen },
+    { id: 'messages', label: 'Nachrichten', caption: 'Was wird gesendet?', icon: MessageSquare },
+  ];
+  const dialog = (
+    <div className="mb-6 grid gap-2 rounded-2xl bg-slate-950 p-4 font-mono text-sm text-slate-100 sm:grid-cols-2">
+      <p><span className="text-cyan-300">Client →</span> HALLO</p>
+      <p><span className="text-emerald-300">Server →</span> OK</p>
+      <p><span className="text-cyan-300">Client →</span> DATEN</p>
+      <p><span className="text-emerald-300">Server →</span> 42</p>
+      <p><span className="text-cyan-300">Client →</span> ENDE</p>
+    </div>
+  );
 
   return (
-    <StationFrame
-      kicker="Gemeinsame Sprache"
-      title="Eine Verbindung transportiert. Ein Protokoll erklärt."
-      lead="Telefone verbinden zwei Personen technisch. Verständigung entsteht erst durch gemeinsame Sprache und Regeln."
-    >
-      <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 font-mono text-sm text-slate-100 shadow-sm">
-        <div className="border-b border-white/10 px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Beispieldialog</div>
-        <div className="space-y-3 p-5">
-          <p><span className="text-cyan-300">Client →</span> HALLO</p>
-          <p><span className="text-emerald-300">Server ←</span> OK</p>
-          <p><span className="text-cyan-300">Client →</span> DATEN</p>
-          <p><span className="text-emerald-300">Server ←</span> 42</p>
-          <p><span className="text-cyan-300">Client →</span> ENDE</p>
-        </div>
-      </div>
-      <TaskCard title="Baue die Definition" description="Vervollständige die Arbeitsdefinition Schritt für Schritt.">
-        <QuizSequence questions={questions} onComplete={onComplete} />
-      </TaskCard>
+    <StationFrame kicker="Gemeinsame Sprache" title="Eine Verbindung transportiert. Ein Protokoll erklärt." lead="Technisch verbunden zu sein reicht nicht: Nachrichten brauchen Form, Bedeutung und eine zulässige Reihenfolge.">
+      <IntroBlock
+        minutes={3}
+        title="Kommunikation braucht gemeinsame Regeln"
+        paragraphs={[
+          'Zwei Telefone können technisch verbunden sein. Ohne gemeinsame Sprache und Gesprächsregeln entsteht trotzdem keine Verständigung.',
+          'Genauso transportiert eine Netzwerkverbindung nur Daten. Das Anwendungsprotokoll legt fest, welche Nachrichten erlaubt sind und was sie bedeuten.',
+        ]}
+        facts={['Nachrichten haben festgelegte Formen.', 'Jede Nachricht besitzt eine Bedeutung.', 'Der aktuelle Zustand bestimmt erlaubte Reihenfolgen.']}
+        note="TCP transportiert Zeichen. Erst das Protokoll macht daraus verständliche Nachrichten."
+      />
+      <SequenceDiagramTask
+        minutes={7}
+        title="Baue die Arbeitsdefinition"
+        description="Ordne die Begriffe zu einer vollständigen Protokoll-Idee."
+        support={dialog}
+        items={nodes}
+        correctOrder={['rules', 'messages', 'meaning', 'order']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        start={{ label: 'Protokoll', icon: Workflow }}
+        end={{ label: 'Verständigung', icon: CheckCircle2 }}
+        success="Genau. Ein Protokoll besteht aus Regeln für Nachrichten, ihre Bedeutung und ihre zulässige Reihenfolge."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
       {done && <CompletedBanner onNext={onNext} text="Mit HTTP untersuchst du jetzt ein echtes Anwendungsprotokoll." />}
     </StationFrame>
   );
 }
 
-function Station3({ done, onComplete, onNext }: StationProps) {
+function LearningStation3({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const [part, setPart] = useState('GET');
   const explanations: Record<string, string> = {
-    GET: 'GET ist die Methode: Der Client möchte eine Ressource abrufen.',
-    '/index.html': 'Das ist die angeforderte Ressource auf dem Server.',
+    GET: 'GET ist die Methode: Der Browser möchte eine Ressource abrufen.',
+    '/index.html': 'Das ist der Pfad der angeforderten Ressource.',
     'HTTP/1.1': 'Hier steht die verwendete Protokollversion.',
-    '200 OK': 'Der Statuscode 200 bedeutet: Anfrage erfolgreich.',
+    '200 OK': 'Der Statuscode 200 meldet eine erfolgreiche Anfrage.',
     'text/html': 'Der Content-Type beschreibt die Art des Antwortinhalts.',
   };
   const questions: QuizQuestion[] = [
@@ -549,75 +895,133 @@ function Station3({ done, onComplete, onNext }: StationProps) {
       success: 'Richtig. Die Verbindung kann stehen, aber der Webserver erwartet eine gültige HTTP-Nachricht.',
     },
   ];
+  const nodes: DiagramNode[] = [
+    { id: 'server', label: 'Webserver', caption: 'prüft den Request', icon: Server },
+    { id: 'response', label: '200 OK + HTML', caption: 'Response', icon: FileCode2 },
+    { id: 'request', label: 'GET /index.html', caption: 'Request', icon: Send },
+    { id: 'transport', label: 'TCP', caption: 'transportiert', icon: Cable },
+  ];
+  const explorer = (
+    <div className="mb-6 grid gap-3 lg:grid-cols-2">
+      <div className="rounded-xl bg-slate-950 p-4 font-mono text-sm text-slate-100">
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Request</p>
+        <p className="leading-8">{['GET', '/index.html', 'HTTP/1.1'].map((token) => <button key={token} type="button" onClick={() => setPart(token)} className="mr-1 rounded bg-white/10 px-2 py-1 text-cyan-300">{token}</button>)}</p>
+        <p className="mt-2 text-slate-300">Host: beispiel.de</p>
+      </div>
+      <div className="rounded-xl border border-slate-200 bg-white p-4 font-mono text-sm text-slate-800">
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Response</p>
+        <p className="leading-8">HTTP/1.1 <button type="button" onClick={() => setPart('200 OK')} className="rounded bg-emerald-100 px-2 py-1 font-bold text-emerald-800">200 OK</button></p>
+        <p className="leading-8">Content-Type: <button type="button" onClick={() => setPart('text/html')} className="rounded bg-cyan-100 px-2 py-1 font-bold text-cyan-900">text/html</button></p>
+      </div>
+      <output className="block rounded-xl border border-cyan-200 bg-cyan-50 p-3 text-sm leading-6 text-cyan-950 lg:col-span-2">{explanations[part]}</output>
+    </div>
+  );
 
   return (
-    <StationFrame
-      kicker="Web-Kommunikation"
-      title="GET rein. Webseite raus."
-      lead="HTTP legt fest, wie ein Browser eine Ressource anfordert und wie ein Webserver antwortet."
-    >
-      <div className="mb-6 grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl bg-slate-950 p-5 font-mono text-sm text-slate-100 shadow-sm">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Request</p>
-          <p className="leading-8">
-            {['GET', '/index.html', 'HTTP/1.1'].map((token) => (
-              <button key={token} type="button" onClick={() => setPart(token)} className="mr-2 rounded-md bg-white/8 px-2 py-1 text-cyan-300 outline-none ring-cyan-300 focus-visible:ring-2">{token}</button>
-            ))}
-          </p>
-          <p className="mt-2 leading-8 text-slate-300">Host: beispiel.de</p>
-        </div>
-        <div className="rounded-2xl bg-white p-5 font-mono text-sm text-slate-800 shadow-sm ring-1 ring-slate-200">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Response</p>
-          <p className="leading-8">HTTP/1.1 <button type="button" onClick={() => setPart('200 OK')} className="rounded-md bg-emerald-100 px-2 py-1 font-bold text-emerald-800">200 OK</button></p>
-          <p className="leading-8">Content-Type: <button type="button" onClick={() => setPart('text/html')} className="rounded-md bg-cyan-100 px-2 py-1 font-bold text-cyan-900">text/html</button></p>
-          <p className="mt-2 text-slate-400">&lt;html&gt; ... &lt;/html&gt;</p>
-        </div>
-      </div>
-      <output className="mb-6 block rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-medium leading-6 text-cyan-950">{explanations[part]}</output>
-      <TaskCard title="TCP oder HTTP?" description="Ordne Transport und Bedeutung auseinander.">
-        <QuizSequence questions={questions} onComplete={onComplete} />
-      </TaskCard>
+    <StationFrame kicker="Web-Kommunikation" title="GET rein. Webseite raus." lead="HTTP zeigt besonders deutlich, wie ein Protokoll eine Anfrage und eine passende Antwort strukturiert.">
+      <IntroBlock
+        minutes={3}
+        title="Browser und Webserver sprechen HTTP"
+        paragraphs={[
+          'Der Browser sendet einen Request. Darin stehen unter anderem Methode, Ressource und Protokollversion.',
+          'Der Server antwortet mit einer Response. Statuscode, Inhaltstyp und eigentlicher Inhalt haben festgelegte Bedeutungen.',
+        ]}
+        facts={['GET fordert eine Ressource an.', '200 OK bedeutet Erfolg.', 'HTML ist Inhalt der Antwort.', 'TCP transportiert, HTTP strukturiert.']}
+        note="Eine funktionierende TCP-Verbindung versteht noch kein GET. Die Bedeutung liefert HTTP."
+      />
+      <SequenceDiagramTask
+        minutes={7}
+        title="Setze den Webzugriff zusammen"
+        description="Untersuche zuerst Request und Response. Ordne danach den vollständigen Ablauf."
+        support={explorer}
+        items={nodes}
+        correctOrder={['request', 'transport', 'server', 'response']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        start={{ label: 'Browser', icon: Globe2 }}
+        end={{ label: 'Webseite', icon: Computer }}
+        success="Richtig. Der Browser formuliert einen HTTP-Request, TCP transportiert ihn, der Server verarbeitet ihn und sendet eine HTTP-Response zurück."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
       {done && <CompletedBanner onNext={onNext} text="Als Nächstes zeigt POP3, warum auch Zustände und Reihenfolgen zum Protokoll gehören." />}
     </StationFrame>
   );
 }
 
-function Station4({ done, onComplete, onNext }: StationProps) {
-  const correctOrder = ['USER philipp', 'PASS geheim', 'STAT', 'RETR 1', 'QUIT'];
+function LearningStation4({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
+  const questions: QuizQuestion[] = [
+    {
+      prompt: 'Was muss vor RETR 1 erfolgreich geschehen sein?',
+      options: ['Anmeldung mit USER und PASS', 'Die Sitzung muss beendet sein', 'Ein HTTP-Request', 'Ein neuer Port'],
+      answer: 'Anmeldung mit USER und PASS',
+      success: 'Richtig. RETR ist erst im angemeldeten Zustand sinnvoll.',
+    },
+    {
+      prompt: 'Welcher Befehl beendet die POP3-Sitzung?',
+      options: ['QUIT', 'STAT', 'PASS', 'RETR'],
+      answer: 'QUIT',
+      success: 'Genau. QUIT beendet den geregelten Dialog.',
+    },
+    {
+      prompt: 'Warum reicht eine Liste aller POP3-Befehle nicht aus?',
+      options: ['Auch Zustände und Reihenfolgen zählen', 'Befehle brauchen keine Bedeutung', 'TCP verbietet Listen', 'Die IP-Adresse legt alles fest'],
+      answer: 'Auch Zustände und Reihenfolgen zählen',
+      success: 'Richtig. Ein Protokoll beschreibt auch, wann ein Befehl zulässig ist.',
+    },
+  ];
+  const nodes: DiagramNode[] = [
+    { id: 'retr', label: 'RETR 1', caption: 'erste Mail abrufen', icon: Mail },
+    { id: 'user', label: 'USER edgar', caption: 'Benutzer nennen', icon: UserRound },
+    { id: 'quit', label: 'QUIT', caption: 'Sitzung beenden', icon: LogOut },
+    { id: 'stat', label: 'STAT', caption: 'Postfach prüfen', icon: Inbox },
+    { id: 'pass', label: 'PASS geheim', caption: 'anmelden', icon: LockKeyhole },
+  ];
+  const legend = (
+    <div className="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-5">
+      {[
+        ['USER', 'Name'],
+        ['PASS', 'Passwort'],
+        ['STAT', 'Status'],
+        ['RETR', 'Abruf'],
+        ['QUIT', 'Ende'],
+      ].map(([command, meaning]) => <div key={command} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-center"><code className="font-black text-teal-700">{command}</code><p className="mt-1 text-xs text-slate-500">{meaning}</p></div>)}
+    </div>
+  );
+
   return (
-    <StationFrame
-      kicker="Dialog mit Regeln"
-      title="POP3 ist mehr als eine Befehlsliste"
-      lead="Ein Mailserver erlaubt manche Nachrichten erst nach erfolgreicher Anmeldung. Der aktuelle Zustand zählt."
-    >
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
-        {[
-          ['USER', 'Benutzer nennen'],
-          ['PASS', 'Passwort senden'],
-          ['STAT', 'Postfach prüfen'],
-          ['RETR', 'Mail abrufen'],
-          ['QUIT', 'Sitzung beenden'],
-        ].map(([command, meaning]) => (
-          <div key={command} className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm">
-            <code className="font-mono text-sm font-black text-teal-700">{command}</code>
-            <p className="mt-1 text-xs leading-5 text-slate-500">{meaning}</p>
-          </div>
-        ))}
-      </div>
-      <TaskCard title="Bringe den Dialog in Ordnung" description="Die Serverantworten +OK sind ausgeblendet. Sortiere die Client-Befehle.">
-        <SortTask
-          items={['RETR 1', 'QUIT', 'PASS geheim', 'STAT', 'USER philipp']}
-          correctOrder={correctOrder}
-          onComplete={onComplete}
-          label="Was sendet der Client zuerst – und was zuletzt?"
-        />
-      </TaskCard>
+    <StationFrame kicker="Dialog mit Regeln" title="POP3 ist mehr als eine Befehlsliste" lead="Beim Mailabruf hängt der nächste erlaubte Schritt vom aktuellen Zustand der Sitzung ab.">
+      <IntroBlock
+        minutes={3}
+        title="Ein Protokoll kann Zustände besitzen"
+        paragraphs={[
+          'Direkt nach dem Verbindungsaufbau ist der Client noch nicht angemeldet. Erst USER und PASS wechseln die Sitzung in den angemeldeten Zustand.',
+          'Danach darf der Client das Postfach prüfen oder Nachrichten abrufen. QUIT beendet die Sitzung. Die Serverantwort +OK bestätigt jeweils einen erfolgreichen Schritt.',
+        ]}
+        facts={['USER und PASS melden an.', 'STAT fragt den Postfachstatus ab.', 'RETR ruft eine Nachricht ab.', 'QUIT beendet die Sitzung.']}
+        note="Ein Befehl ist nicht nur richtig oder falsch – er kann im aktuellen Zustand erlaubt oder verboten sein."
+      />
+      <SequenceDiagramTask
+        minutes={11}
+        title="Baue den POP3-Dialog"
+        description="Die +OK-Antworten sind ausgeblendet. Ordne die fünf Client-Befehle zu einer gültigen Sitzung."
+        support={legend}
+        items={nodes}
+        correctOrder={['user', 'pass', 'stat', 'retr', 'quit']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        start={{ label: 'Verbunden', icon: Cable }}
+        end={{ label: 'Beendet', icon: LogOut }}
+        success="Richtig. Nach USER und PASS ist der Client angemeldet, kann den Status prüfen, eine Mail abrufen und die Sitzung mit QUIT beenden."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={6} />
       {done && <CompletedBanner onNext={onNext} text="Jetzt findest du dieselben Netzwerkideen im Java-Code der Klasse Connection wieder." />}
     </StationFrame>
   );
 }
 
-function Station5({ done, onComplete, onNext }: StationProps) {
+function LearningStation5({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const [token, setToken] = useState('Connection');
   const explanations: Record<string, string> = {
     Connection: 'Connection ist der Kommunikationskanal zum Server.',
@@ -627,137 +1031,214 @@ function Station5({ done, onComplete, onNext }: StationProps) {
     receive: 'receive() wartet auf eine Textzeile vom Server.',
     close: 'close() beendet die Verbindung.',
   };
-  const order = ['Verbindung herstellen', 'Nachricht senden', 'Antwort empfangen', 'Verbindung schließen'];
-
-  return (
-    <StationFrame
-      kicker="Java-Verbindung"
-      title="Netzwerkbegriffe werden zu Code"
-      lead="Die NRW-Klasse Connection versteckt viele Socket-Details. IP, Port, Senden, Empfangen und Schließen bleiben sichtbar."
-    >
-      <div className="mb-6 overflow-hidden rounded-2xl bg-slate-950 shadow-sm">
-        <div className="flex items-center gap-2 border-b border-white/10 px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-500"><Code2 className="size-4" /> Java-Exploration</div>
-        <pre className="overflow-x-auto p-5 font-mono text-sm leading-8 text-slate-300"><code>
-          <button type="button" onClick={() => setToken('Connection')} className="rounded bg-white/8 px-1 text-cyan-300">Connection</button>{' verbindung = new Connection("'}<button type="button" onClick={() => setToken('192.168.0.10')} className="rounded bg-white/8 px-1 text-amber-300">192.168.0.10</button>{'", '}<button type="button" onClick={() => setToken('5000')} className="rounded bg-white/8 px-1 text-amber-300">5000</button>{');\n\nverbindung.'}<button type="button" onClick={() => setToken('send')} className="rounded bg-white/8 px-1 text-emerald-300">send</button>{'("HALLO");\nString antwort = verbindung.'}<button type="button" onClick={() => setToken('receive')} className="rounded bg-white/8 px-1 text-emerald-300">receive</button>{'();\nverbindung.'}<button type="button" onClick={() => setToken('close')} className="rounded bg-white/8 px-1 text-rose-300">close</button>{'();'}
+  const questions: QuizQuestion[] = [
+    {
+      prompt: 'Welche Angabe bestimmt in new Connection("192.168.0.10", 5000) das Serverprogramm?',
+      options: ['5000', '192.168.0.10', 'Connection', 'new'],
+      answer: '5000',
+      success: 'Richtig. 5000 ist der Port des Serverprogramms.',
+    },
+    {
+      prompt: 'Welche Methode sendet eine Textzeile zum Server?',
+      options: ['send(...)', 'receive()', 'close()', 'processMessage(...)'],
+      answer: 'send(...)',
+      success: 'Genau. send(...) übergibt eine Nachricht an die bestehende Verbindung.',
+    },
+    {
+      prompt: 'Was geschieht bei receive()?',
+      options: ['Das Programm wartet auf eine Textzeile', 'Der Port wird geändert', 'Der Server wird beendet', 'Eine IP-Adresse wird erzeugt'],
+      answer: 'Das Programm wartet auf eine Textzeile',
+      success: 'Richtig. receive() liest die nächste Antwort des Servers.',
+    },
+  ];
+  const nodes: DiagramNode[] = [
+    { id: 'receive', label: 'receive()', caption: 'Antwort empfangen', icon: Inbox },
+    { id: 'connect', label: 'new Connection', caption: 'Verbindung aufbauen', icon: Cable },
+    { id: 'close', label: 'close()', caption: 'Verbindung schließen', icon: LogOut },
+    { id: 'send', label: 'send("HALLO")', caption: 'Nachricht senden', icon: Send },
+  ];
+  const codeExplorer = (
+    <div className="mb-6">
+      <div className="overflow-hidden rounded-xl bg-slate-950">
+        <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-500"><Code2 className="size-4" /> Code untersuchen</div>
+        <pre className="overflow-x-auto p-4 font-mono text-sm leading-8 text-slate-300"><code>
+          <button type="button" onClick={() => setToken('Connection')} className="rounded bg-white/10 px-1 text-cyan-300">Connection</button>{' verbindung = new Connection("'}<button type="button" onClick={() => setToken('192.168.0.10')} className="rounded bg-white/10 px-1 text-amber-300">192.168.0.10</button>{'", '}<button type="button" onClick={() => setToken('5000')} className="rounded bg-white/10 px-1 text-amber-300">5000</button>{');\n\nverbindung.'}<button type="button" onClick={() => setToken('send')} className="rounded bg-white/10 px-1 text-emerald-300">send</button>{'("HALLO");\nString antwort = verbindung.'}<button type="button" onClick={() => setToken('receive')} className="rounded bg-white/10 px-1 text-emerald-300">receive</button>{'();\nverbindung.'}<button type="button" onClick={() => setToken('close')} className="rounded bg-white/10 px-1 text-rose-300">close</button>{'();'}
         </code></pre>
       </div>
-      <output className="mb-6 block rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-medium leading-6 text-cyan-950">{explanations[token]}</output>
-      <TaskCard title="Vom Aufbau bis zum Ende" description="Sortiere den typischen Ablauf einer kurzen Anfrage.">
-        <SortTask
-          items={['Antwort empfangen', 'Verbindung schließen', 'Nachricht senden', 'Verbindung herstellen']}
-          correctOrder={order}
-          onComplete={onComplete}
-          label="In welcher Reihenfolge arbeitet Connection?"
-        />
-      </TaskCard>
+      <output className="mt-3 block rounded-xl border border-cyan-200 bg-cyan-50 p-3 text-sm leading-6 text-cyan-950">{explanations[token]}</output>
+    </div>
+  );
+
+  return (
+    <StationFrame kicker="Java-Verbindung" title="Netzwerkbegriffe werden zu Code" lead="Die NRW-Klasse Connection macht aus IP, Port und Nachrichten wenige gut lesbare Methodenaufrufe.">
+      <IntroBlock
+        minutes={4}
+        title="Connection versteckt die Socket-Details"
+        paragraphs={[
+          'Intern nutzt Connection einen Socket sowie Ein- und Ausgabeströme. Für die erste Anwendung musst du diese Details noch nicht selbst programmieren.',
+          'Sichtbar bleiben die fachlich wichtigen Schritte: Ziel festlegen, Verbindung öffnen, Text senden, Antwort empfangen und Verbindung schließen.',
+        ]}
+        facts={['IP und Port stehen im Konstruktor.', 'send(...) verschickt eine Zeile.', 'receive() liest eine Zeile.', 'close() beendet den Kanal.']}
+        note="Connection bildet eine bestehende TCP-Verbindung als einfachen Kommunikationskanal für Strings ab."
+      />
+      <SequenceDiagramTask
+        minutes={10}
+        title="Verbinde Code und Kommunikationsablauf"
+        description="Tippe zuerst auf farbige Codestellen. Setze danach die vier sichtbaren Schritte zusammen."
+        support={codeExplorer}
+        items={nodes}
+        correctOrder={['connect', 'send', 'receive', 'close']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        start={{ label: 'Java-Client', icon: FileCode2 }}
+        end={{ label: 'Server', icon: Server }}
+        success="Richtig. Die Verbindung entsteht zuerst, danach folgen Anfrage und Antwort; am Ende wird der Kanal geschlossen."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={6} />
       {done && <CompletedBanner onNext={onNext} text="Connection wartet gezielt auf Antworten. Die Klasse Client kann zusätzlich jederzeit auf eintreffende Nachrichten reagieren." />}
     </StationFrame>
   );
 }
 
-function Station6({ done, onComplete, onNext }: StationProps) {
+function LearningStation6({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const questions: QuizQuestion[] = [
     {
-      prompt: 'Ein Programm fragt einmal die aktuelle Uhrzeit ab.',
-      options: ['Connection', 'Client mit processMessage()', 'Server', 'Kein Netzwerk nötig'],
-      answer: 'Connection',
-      success: 'Richtig. Eine gezielte Anfrage mit direkter Antwort passt gut zu send() und receive().',
+      prompt: 'Eine App fragt einmal den aktuellen Wechselkurs ab. Welches Modell passt?',
+      options: ['Connection mit send() und receive()', 'Client mit processMessage()', 'Server mit sendToAll()', 'Nur eine IP-Adresse'],
+      answer: 'Connection mit send() und receive()',
+      success: 'Richtig. Eine gezielte Anfrage mit direkter Antwort passt zum synchronen Muster.',
     },
     {
-      prompt: 'Ein Chat soll jederzeit neue Nachrichten anzeigen.',
-      options: ['Connection', 'Client mit processMessage()', 'Nur ein Port', 'HTTP GET'],
+      prompt: 'Ein Warnsystem soll jederzeit neue Alarme anzeigen. Welches Modell passt?',
+      options: ['Client mit processMessage()', 'Connection nur mit close()', 'HTTP ohne Verbindung', 'Ein anderer Port reicht'],
       answer: 'Client mit processMessage()',
-      success: 'Genau. processMessage() reagiert, sobald eine Nachricht eintrifft.',
+      success: 'Genau. processMessage() reagiert, sobald eine neue Nachricht eintrifft.',
     },
     {
-      prompt: 'Ein Spielserver sendet spontan einen neuen Spielstand.',
-      options: ['Client mit processMessage()', 'Nur Connection.close()', 'POP3', 'Eine neue IP-Adresse'],
-      answer: 'Client mit processMessage()',
-      success: 'Richtig. Der Client muss unabhängig vom Hauptprogramm reagieren können.',
+      prompt: 'Wozu dient processMessage(String pMessage)?',
+      options: ['Auf eingehende Nachrichten reagieren', 'Eine IP-Adresse vergeben', 'TCP ersetzen', 'Den Server kompilieren'],
+      answer: 'Auf eingehende Nachrichten reagieren',
+      success: 'Richtig. Die Methode wird für eintreffende Nachrichten aufgerufen.',
     },
   ];
+  const categories: MatchCategory[] = [
+    { id: 'connection', label: 'Connection', caption: 'gezielt senden und dann empfangen', icon: Cable },
+    { id: 'client', label: 'Client', caption: 'jederzeit auf Nachrichten reagieren', icon: MessageSquare },
+  ];
+  const items: MatchItem[] = [
+    { id: 'game', label: 'Spielstand trifft spontan ein', target: 'client', icon: PackageCheck },
+    { id: 'time', label: 'Uhrzeit einmalig abfragen', target: 'connection', icon: Clock3 },
+    { id: 'download', label: 'Eine Datei gezielt anfordern', target: 'connection', icon: Inbox },
+    { id: 'chat', label: 'Chatnachrichten laufend anzeigen', target: 'client', icon: MessageSquare },
+  ];
+  const comparison = (
+    <div className="mb-6 grid gap-3 sm:grid-cols-2">
+      <div className="rounded-xl bg-slate-950 p-4 text-white"><Badge className="bg-cyan-300 text-slate-950">Connection</Badge><p className="mt-3 font-mono text-sm">send(...);<br />receive();</p><p className="mt-3 text-xs leading-5 text-slate-400">Das Hauptprogramm fragt die Antwort aktiv ab.</p></div>
+      <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-cyan-950"><Badge className="bg-cyan-700 text-white">Client</Badge><p className="mt-3 font-mono text-sm font-bold">processMessage(...)</p><p className="mt-3 text-xs leading-5 text-cyan-800">Die Unterklasse reagiert auf eintreffende Nachrichten.</p></div>
+    </div>
+  );
+
   return (
-    <StationFrame
-      kicker="Nachrichten empfangen"
-      title="Abfragen oder reagieren?"
-      lead="Connection folgt meist send() → receive(). Client besitzt einen Hintergrundmechanismus und ruft bei neuen Nachrichten processMessage() auf."
-    >
-      <div className="mb-6 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <Badge className="bg-slate-950 text-white">Connection</Badge>
-          <p className="mt-4 font-mono text-sm font-bold text-slate-900">send(...);<br />receive();</p>
-          <p className="mt-3 text-sm leading-6 text-slate-600">Das Programm fragt eine Antwort aktiv ab.</p>
-        </div>
-        <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-5 shadow-sm">
-          <Badge className="bg-cyan-700 text-white">Client</Badge>
-          <p className="mt-4 font-mono text-sm font-bold text-slate-900">processMessage(...)</p>
-          <p className="mt-3 text-sm leading-6 text-slate-600">Das Programm reagiert auf eintreffende Nachrichten.</p>
-        </div>
-      </div>
-      <TaskCard title="Wähle das passende Modell" description="Entscheide aus Sicht des empfangenden Programms.">
-        <QuizSequence questions={questions} onComplete={onComplete} />
-      </TaskCard>
+    <StationFrame kicker="Nachrichten empfangen" title="Abfragen oder reagieren?" lead="Nicht jede Anwendung weiß vorher, wann die nächste Nachricht eintreffen wird.">
+      <IntroBlock
+        minutes={3}
+        title="Zwei passende Modelle für zwei Situationen"
+        paragraphs={[
+          'Mit Connection arbeitet ein Programm häufig Schritt für Schritt: Es sendet eine Anfrage und ruft receive() auf, wenn es die Antwort erwartet.',
+          'Die Klasse Client empfängt im Hintergrund. Trifft eine Nachricht ein, wird processMessage(...) aufgerufen – auch wenn das Hauptprogramm gerade etwas anderes tut.',
+        ]}
+        facts={['Connection passt zu Anfrage–Antwort.', 'Client passt zu spontanen Ereignissen.', 'Threads bleiben hier ein Implementierungsdetail.']}
+        note="Wenn Nachrichten jederzeit eintreffen können, braucht das Programm einen dauerhaften Empfangsmechanismus."
+      />
+      <MatchDiagramTask
+        minutes={7}
+        title="Ordne die Kommunikationsmuster"
+        description="Wähle eine Szenariokarte und setze sie in den passenden Zielbereich."
+        support={comparison}
+        categories={categories}
+        items={items}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        success="Richtig. Gezielte Einzelabfragen passen zu Connection; Chat und Spiel benötigen Reaktionen auf spontan eintreffende Nachrichten."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} />
       {done && <CompletedBanner onNext={onNext} text="Auf der anderen Seite reagiert der Server auf neue Verbindungen, Nachrichten und Trennungen." />}
     </StationFrame>
   );
 }
 
-function Station7({ done, onComplete, onNext }: StationProps) {
+function LearningStation7({ done, onComplete, onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const questions: QuizQuestion[] = [
     {
-      prompt: 'Anna verbindet sich mit dem Server.',
-      options: ['processNewConnection(...)', 'processMessage(...)', 'processClosingConnection(...)', 'receive()'],
-      answer: 'processNewConnection(...)',
-      success: 'Richtig. Eine neue Verbindung löst processNewConnection(...) aus.',
-    },
-    {
-      prompt: 'Anna sendet „LOGIN:Anna“.',
-      options: ['processNewConnection(...)', 'processMessage(...)', 'processClosingConnection(...)', 'close()'],
+      prompt: 'Wo verarbeitet der Server die Nachricht „PING“?',
+      options: ['processMessage(...)', 'processNewConnection(...)', 'processClosingConnection(...)', 'receive()'],
       answer: 'processMessage(...)',
-      success: 'Genau. Eingehende Inhalte werden in processMessage(...) behandelt.',
+      success: 'Richtig. Inhalte eingehender Nachrichten werden in processMessage(...) behandelt.',
     },
     {
-      prompt: 'Anna beendet das Programm.',
-      options: ['processNewConnection(...)', 'processMessage(...)', 'processClosingConnection(...)', 'sendToAll()'],
-      answer: 'processClosingConnection(...)',
-      success: 'Richtig. Die Server-Unterklasse kann auf die Trennung reagieren.',
+      prompt: 'Mit welchem Aufruf antwortet der Server einem bestimmten Client?',
+      options: ['send(pClientIP, pClientPort, "PONG")', 'close()', 'receive()', 'new Connection(...)'],
+      answer: 'send(pClientIP, pClientPort, "PONG")',
+      success: 'Genau. IP und Port identifizieren die konkrete Client-Verbindung.',
+    },
+    {
+      prompt: 'Was sollte bei einer Trennung aufgeräumt werden?',
+      options: ['Zustand dieses Clients', 'Die IP aller Server', 'Das HTTP-Protokoll', 'Der Java-Compiler'],
+      answer: 'Zustand dieses Clients',
+      success: 'Richtig. processClosingConnection(...) ist der passende Ort für Aufräumarbeiten.',
     },
   ];
+  const categories: MatchCategory[] = [
+    { id: 'new', label: 'processNewConnection(...)', caption: 'neuer Client', icon: LogIn },
+    { id: 'message', label: 'processMessage(...)', caption: 'neuer Inhalt', icon: MessageSquare },
+    { id: 'closing', label: 'processClosingConnection(...)', caption: 'Client geht', icon: LogOut },
+  ];
+  const items: MatchItem[] = [
+    { id: 'anna-message', label: 'Anna sendet LOGIN:Anna', target: 'message', icon: Send },
+    { id: 'ben-leaves', label: 'Ben beendet sein Programm', target: 'closing', icon: LogOut },
+    { id: 'anna-connects', label: 'Anna verbindet sich', target: 'new', icon: LogIn },
+  ];
+  const code = (
+    <div className="mb-6 rounded-xl bg-slate-950 p-4 font-mono text-sm leading-7 text-slate-200">
+      <p><span className="text-violet-300">if</span> (pMessage.equals(<span className="text-amber-300">&quot;PING&quot;</span>)) {'{'}</p>
+      <p className="pl-5">send(pClientIP, pClientPort, <span className="text-emerald-300">&quot;PONG&quot;</span>);</p>
+      <p>{'}'}</p>
+    </div>
+  );
+
   return (
-    <StationFrame
-      kicker="Ereignisse behandeln"
-      title="Der Server reagiert auf drei Momente"
-      lead="Threads und Socketverwaltung bleiben im Hintergrund. Für die eigene Unterklasse zählen drei klar erkennbare Netzwerkereignisse."
-    >
-      <div className="mb-6 grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
-        {[
-          ['01', 'Neue Verbindung'],
-          ['02', 'Nachricht'],
-          ['03', 'Trennung'],
-        ].map(([number, title], index) => (
-          <div key={number} className="contents">
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm">
-              <p className="font-mono text-xs font-bold text-teal-700">{number}</p>
-              <p className="mt-1 text-sm font-bold text-slate-900">{title}</p>
-            </div>
-            {index < 2 && <ArrowRight className="mx-auto hidden size-5 text-slate-300 sm:block" />}
-          </div>
-        ))}
-      </div>
-      <TaskCard title="Welches Ereignis ist das?" description="Ordne jede Situation der richtigen abstrakten Methode zu.">
-        <QuizSequence questions={questions} onComplete={onComplete} />
-      </TaskCard>
-      <div className="mt-6 rounded-2xl bg-slate-950 p-5 font-mono text-sm leading-7 text-slate-200">
-        <p><span className="text-violet-300">if</span> (pMessage.equals(<span className="text-amber-300">&quot;PING&quot;</span>)) {'{'}</p>
-        <p className="pl-5">send(pClientIP, pClientPort, <span className="text-emerald-300">&quot;PONG&quot;</span>);</p>
-        <p>{'}'}</p>
-      </div>
+    <StationFrame kicker="Ereignisse behandeln" title="Der Server reagiert auf drei Momente" lead="Die komplexe Socketverwaltung bleibt verborgen. Die eigene Unterklasse bearbeitet drei verständliche Netzwerkereignisse.">
+      <IntroBlock
+        minutes={2}
+        title="Der Server wird durch Ereignisse aufgerufen"
+        paragraphs={[
+          'Mehrere Clients können gleichzeitig mit dem Server verbunden sein. Die NRW-Klasse verwaltet diese Verbindungen intern.',
+          'Die eigene Unterklasse reagiert nur auf drei Momente: Ein Client kommt, sendet eine Nachricht oder trennt die Verbindung.',
+        ]}
+        facts={['Neue Verbindung → processNewConnection', 'Nachricht → processMessage', 'Trennung → processClosingConnection']}
+        note="Die Methoden werden nicht nacheinander abgespult; sie werden passend zum eintretenden Netzwerkereignis aufgerufen."
+      />
+      <MatchDiagramTask
+        minutes={5}
+        title="Verbinde Ereignis und Methode"
+        description="Setze jede Situation in die Methode, die der Server dafür aufruft."
+        support={code}
+        categories={categories}
+        items={items}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        success="Richtig. Verbindung, Nachricht und Trennung lösen jeweils genau die passende abstrakte Methode aus."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={3} />
       {done && <CompletedBanner onNext={onNext} text="Du kennst jetzt beide Seiten. Im Finale entwirfst du die gemeinsame Sprache selbst." />}
     </StationFrame>
   );
 }
 
-function Station8({ done, onComplete, onNext: _onNext }: StationProps) {
+function LearningStation8({ done, onComplete, onNext: _onNext }: StationProps) {
+  const [diagramDone, setDiagramDone] = useState(done);
   const [checked, setChecked] = useState<number[]>([]);
   const questions: QuizQuestion[] = [
     {
@@ -785,6 +1266,22 @@ function Station8({ done, onComplete, onNext: _onNext }: StationProps) {
       success: 'Richtig. Ein robustes Protokoll definiert auch Fehlerantworten.',
     },
   ];
+  const nodes: DiagramNode[] = [
+    { id: 'answer', label: 'C → S ANSWER:C', caption: 'Antwort senden', icon: Send },
+    { id: 'bye', label: 'S → C BYE', caption: 'Sitzung beendet', icon: LogOut },
+    { id: 'login', label: 'C → S LOGIN:Anna', caption: 'Name anmelden', icon: UserRound },
+    { id: 'question-data', label: 'S → C QUESTION:…', caption: 'Frage liefern', icon: Braces },
+    { id: 'correct', label: 'S → C CORRECT', caption: 'Antwort bewerten', icon: CheckCircle2 },
+    { id: 'ok', label: 'S → C OK', caption: 'Anmeldung bestätigen', icon: Check },
+    { id: 'quit', label: 'C → S QUIT', caption: 'Verbindung beenden', icon: LogOut },
+    { id: 'question', label: 'C → S QUESTION', caption: 'Frage anfordern', icon: MessageSquare },
+  ];
+  const protocolCards = (
+    <div className="mb-6 grid gap-3 sm:grid-cols-2">
+      <div className="rounded-xl bg-slate-950 p-4 text-slate-100"><p className="text-xs font-bold uppercase tracking-[0.14em] text-cyan-300">Client sendet</p><div className="mt-3 space-y-1.5 font-mono text-xs"><p>LOGIN:&lt;Name&gt;</p><p>QUESTION</p><p>ANSWER:&lt;Auswahl&gt;</p><p>QUIT</p></div></div>
+      <div className="rounded-xl border border-slate-200 bg-white p-4 text-slate-800"><p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-700">Server antwortet</p><div className="mt-3 space-y-1.5 font-mono text-xs"><p>OK / ERROR:...</p><p>QUESTION:...</p><p>CORRECT / WRONG</p><p>BYE</p></div></div>
+    </div>
+  );
   const goals = [
     'IP-Adresse und Port unterscheiden',
     'TCP und Anwendungsprotokoll trennen',
@@ -793,25 +1290,31 @@ function Station8({ done, onComplete, onNext: _onNext }: StationProps) {
     'processMessage() einordnen',
     'ein eigenes Protokoll entwerfen',
   ];
+
   return (
-    <StationFrame
-      kicker="Transfer"
-      title="Jetzt entwirfst du die Sprache"
-      lead="Der Quizserver braucht eindeutige Nachrichten, eine zulässige Reihenfolge und sinnvolle Antworten auf Fehler."
-    >
-      <div className="mb-6 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-2xl bg-slate-950 p-5 text-slate-100">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-cyan-300">Client sendet</p>
-          <div className="mt-3 space-y-2 font-mono text-sm"><p>LOGIN:&lt;Name&gt;</p><p>QUESTION</p><p>ANSWER:&lt;Antwort&gt;</p><p>QUIT</p></div>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 text-slate-800 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-700">Server antwortet</p>
-          <div className="mt-3 space-y-2 font-mono text-sm"><p>OK / ERROR:...</p><p>QUESTION:...</p><p>CORRECT / WRONG</p><p>BYE</p></div>
-        </div>
-      </div>
-      <TaskCard title="Baue ein belastbares Quizprotokoll" description="Lege Nachrichtentypen und Fehlerbehandlung fest.">
-        <QuizSequence questions={questions} onComplete={onComplete} completeLabel="Protokoll festlegen" />
-      </TaskCard>
+    <StationFrame kicker="Transfer" title="Jetzt entwirfst du die Sprache" lead="Im Finale entsteht aus Nachrichtentypen, Zuständen und Fehlerregeln ein vollständiger Quizdialog.">
+      <IntroBlock
+        minutes={3}
+        title="Ein eigenes Protokoll muss eindeutig sein"
+        paragraphs={[
+          'Der Quizclient meldet einen Namen an, fordert eine Frage an, sendet eine Antwort und beendet später die Verbindung.',
+          'Jede Nachricht braucht eine eindeutige Form. Außerdem muss der Server auf unbekannte oder im falschen Zustand gesendete Befehle mit einer verständlichen Fehlermeldung reagieren.',
+        ]}
+        facts={['Nachrichtentyp und Nutzdaten trennen.', 'Client- und Servernachrichten unterscheiden.', 'Reihenfolge und Fehlerfälle festlegen.']}
+        note="Ein robustes Protokoll beschreibt nicht nur den Idealfall, sondern auch unerlaubte Nachrichten und passende Fehlerantworten."
+      />
+      <SequenceDiagramTask
+        minutes={7}
+        title="Baue einen vollständigen Quizdialog"
+        description="Ordne abwechselnd Client- und Servernachrichten von der Anmeldung bis zum Abschied."
+        support={protocolCards}
+        items={nodes}
+        correctOrder={['login', 'ok', 'question', 'question-data', 'answer', 'correct', 'quit', 'bye']}
+        completed={diagramDone}
+        onComplete={() => setDiagramDone(true)}
+        success="Richtig. Der Dialog besitzt eine Anmeldung, eine Frage-Antwort-Runde und einen geregelten Abschluss."
+      />
+      <FinalQuiz unlocked={diagramDone || done} questions={questions} onComplete={onComplete} minutes={5} title="Protokoll-Check" description="Prüfe Syntax, Ablauf und Fehlerbehandlung deines Quizprotokolls." completeLabel="Protokoll festlegen" />
       {done && (
         <>
           <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
@@ -836,7 +1339,7 @@ export default function Home() {
   const [currentStation, setCurrentStation] = useState(0);
   const [completed, setCompleted] = useState<number[]>(() => {
     try {
-      const stored = window.localStorage.getItem('netzwerke-q2-progress');
+      const stored = window.localStorage.getItem('netzwerke-q2-progress-v2');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) return parsed;
@@ -849,7 +1352,7 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem('netzwerke-q2-progress', JSON.stringify(completed));
+      window.localStorage.setItem('netzwerke-q2-progress-v2', JSON.stringify(completed));
     } catch {
       // localStorage darf ausfallen, ohne die Lernstrecke zu blockieren.
     }
@@ -926,15 +1429,15 @@ export default function Home() {
       onNext: () => navigate(currentStation + 1),
     };
     switch (currentStation) {
-      case 0: return <Station0 {...props} />;
-      case 1: return <Station1 {...props} />;
-      case 2: return <Station2 {...props} />;
-      case 3: return <Station3 {...props} />;
-      case 4: return <Station4 {...props} />;
-      case 5: return <Station5 {...props} />;
-      case 6: return <Station6 {...props} />;
-      case 7: return <Station7 {...props} />;
-      default: return <Station8 {...props} />;
+      case 0: return <LearningStation0 {...props} />;
+      case 1: return <LearningStation1 {...props} />;
+      case 2: return <LearningStation2 {...props} />;
+      case 3: return <LearningStation3 {...props} />;
+      case 4: return <LearningStation4 {...props} />;
+      case 5: return <LearningStation5 {...props} />;
+      case 6: return <LearningStation6 {...props} />;
+      case 7: return <LearningStation7 {...props} />;
+      default: return <LearningStation8 {...props} />;
     }
   }
 
@@ -960,6 +1463,10 @@ export default function Home() {
 
       <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[310px_minmax(0,1fr)]">
         <aside className="border-b bg-slate-950 text-slate-200 lg:min-h-[calc(100vh-65px)] lg:border-b-0 lg:border-r lg:border-white/10">
+          <div className="hidden border-b border-white/10 px-5 py-4 lg:block">
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Zeitplan</p>
+            <p className="mt-1 text-sm font-bold text-slate-200">3 × 45 Min. · insgesamt 135 Min.</p>
+          </div>
           <div className="flex gap-2 overflow-x-auto p-3 lg:block lg:space-y-2 lg:p-5">
             {stations.map(([eyebrow, title, duration], index) => {
               const active = currentStation === index;
